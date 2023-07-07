@@ -66,7 +66,6 @@
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\BoundsControl\Scripts\BoundsControlRuntimeExample.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - Boundary\Scripts\BoundaryVisualizationDemo.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\ProgressIndicator\Scripts\ProgressIndicatorDemoAsyncMethod.cs" />
-    <Compile Include="Assets\Scripts\Export.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\Dialog\Scripts\DialogExampleController.cs" />
     <Compile Include="Assets\Scripts\MeshDeformer.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\Collections\Scripts\GridObjectLayoutControl.cs" />
