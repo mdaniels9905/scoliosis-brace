@@ -73,6 +73,7 @@
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\ProgressIndicator\Scripts\IProgressIndicatorDemoObject.cs" />
     <Compile Include="Assets\Scripts\MenuHandler.cs" />
     <Compile Include="Assets\_Heathen Engineering\Samples\UX Examples\Flat Icons [Free]\ToggleSetAnimatorBoolean.cs" />
+    <Compile Include="Assets\Scripts\ExportMesh.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\ManipulationHandler\Scripts\ChangeManipulation.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\Dwell\InstantDwellSample.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\ProgressIndicator\Scripts\ProgressIndicatorDemo.cs" />
