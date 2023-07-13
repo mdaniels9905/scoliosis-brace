@@ -1178,20 +1178,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8164078558771037576, guid: cfa883bd59ac879498bb83e4bbdb6ca3, type: 3}
   m_PrefabInstance: {fileID: 929363126}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1782916482
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1782916478}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c764f3fc911cbd8488fb3faf7e112878, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  meshDeformer: {fileID: 1782916490}
-  material: {fileID: 2100000, guid: ad7678afa1b0a3242b330b67481eccf7, type: 2}
 --- !u!114 &1782916483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1441,6 +1427,21 @@ MonoBehaviour:
   executionOrder: 0
   constraintOnRotation: -1
   useLocalSpaceForConstraint: 0
+--- !u!114 &1782916503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782916478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c764f3fc911cbd8488fb3faf7e112878, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fileName: ExportedScoliosisBrace.obj
+  meshDeformer: {fileID: 1782916490}
+  extrusionDistance: 3
 --- !u!114 &1784620424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1505,6 +1506,18 @@ PrefabInstance:
     - target: {fileID: 848684180828710855, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1061387880118192949, guid: e969038e4d67d9b498de2ef538969506, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1782916490}
+    - target: {fileID: 1061387880118192949, guid: e969038e4d67d9b498de2ef538969506, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ResetMesh
+      objectReference: {fileID: 0}
+    - target: {fileID: 1061387880118192949, guid: e969038e4d67d9b498de2ef538969506, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MeshDeformer, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1104838564556229266, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: m_Mesh
@@ -1673,7 +1686,7 @@ PrefabInstance:
     - target: {fileID: 6722744150799764869, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1782916482}
+      objectReference: {fileID: 1782916503}
     - target: {fileID: 6722744150799764869, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ExtrudeMesh
@@ -1752,7 +1765,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7636352527081481622, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: m_Name
-      value: Scan
+      value: Reset
       objectReference: {fileID: 0}
     - target: {fileID: 7636352527568319512, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: m_Mesh
@@ -1760,7 +1773,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7636352527568319590, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: m_text
-      value: Scan
+      value: Reset
       objectReference: {fileID: 0}
     - target: {fileID: 7636352527568319590, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: m_textAlignment

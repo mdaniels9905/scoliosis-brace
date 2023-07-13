@@ -62,7 +62,9 @@
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\ObjectManipulator\Scripts\ReturnToBounds.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\BoundingBox\Scripts\BoundingBoxExampleTest.cs" />
     <Compile Include="Assets\Scripts\ManipulateObject.cs" />
+    <Compile Include="Assets\Scripts\SimplfyVector.cs" />
     <Compile Include="Assets\Scripts\Undo.cs" />
+    <Compile Include="Assets\Scripts\NewMesh.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\BoundsControl\Scripts\BoundsControlRuntimeExample.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - Boundary\Scripts\BoundaryVisualizationDemo.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\ProgressIndicator\Scripts\ProgressIndicatorDemoAsyncMethod.cs" />
@@ -77,6 +79,7 @@
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\ManipulationHandler\Scripts\ChangeManipulation.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\Dwell\InstantDwellSample.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\ProgressIndicator\Scripts\ProgressIndicatorDemo.cs" />
+    <Compile Include="Assets\Scripts\FindEdgeVertices.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\Dwell\ToggleDwellSample.cs" />
     <Compile Include="Assets\Scripts\PointOctreeNode.cs" />
     <Compile Include="Assets\Scripts\PointOctree.cs" />
