@@ -73,7 +73,7 @@
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\Collections\Scripts\GridObjectLayoutControl.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\Dwell\BaseDwellSample.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\ProgressIndicator\Scripts\IProgressIndicatorDemoObject.cs" />
-    <Compile Include="Assets\Scripts\MenuHandler.cs" />
+    <Compile Include="Assets\Scripts\ObjectToggler.cs" />
     <Compile Include="Assets\_Heathen Engineering\Samples\UX Examples\Flat Icons [Free]\ToggleSetAnimatorBoolean.cs" />
     <Compile Include="Assets\Scripts\ExportMesh.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\ManipulationHandler\Scripts\ChangeManipulation.cs" />
@@ -91,13 +91,15 @@
     <Compile Include="Assets\Ciconia Studio\_Shared Files\Scripts\Demo\FreeCamera.cs" />
     <Compile Include="Assets\Scripts\ShaderOptions.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\Dwell\ListItemDwell.cs" />
+    <Compile Include="Assets\Scripts\ToggleButtonColor.cs" />
+    <Compile Include="Assets\Scripts\MoveButtonToggler.cs" />
+    <Compile Include="Assets\Scripts\RotateButtonToggler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\MRTK\Shaders\Text3DShader.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\MRTK\Shaders\InstancedColored.shader" />
-    <None Include="Assets\Materials\TriangleShader.shader" />
     <None Include="Assets\MRTK\Shaders\MixedRealityTextMeshProSprite.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\MRTK\Shaders\ChannelPacker.shader" />
