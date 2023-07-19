@@ -3,8 +3,11 @@ using Microsoft.MixedReality.Toolkit.UI;
 
 public class RadiusModifier : MonoBehaviour {
     
-    public MeshDeformer meshDeformer;
-    public PinchSlider pinchSlider;
+    private MeshDeformer meshDeformer;
+
+    private void Start () {
+        meshDeformer = GetComponent<MeshDeformer>();
+    }
 
     public void UpdateDeformationRadius ( SliderEventData eventData ) {
         float temp = eventData.NewValue;

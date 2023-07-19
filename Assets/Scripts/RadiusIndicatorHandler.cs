@@ -5,13 +5,23 @@ using System;
 
 public class RadiusIndicatorHandler : MonoBehaviour {
 
-    public GameObject scoliosisBraceObject;
-    public GameObject radiusSlider;
-    public MeshDeformer meshDeformer;
-    public Material opaqueMaterial;
-    public Material transparentMaterial;
-    public bool rotationActivated = false;
-    public bool movementActivated = false;
+    public bool RotationActivated { get; set; } = false;
+    public bool MovementActivated { get; set; } = false;
+
+    [SerializeField]
+    private GameObject scoliosisBraceObject;
+
+    [SerializeField]
+    private GameObject radiusSlider;
+
+    [SerializeField]
+    private MeshDeformer meshDeformer;
+
+    [SerializeField]
+    private Material opaqueMaterial;
+
+    [SerializeField]
+    private Material transparentMaterial;
 
     private float sphereRadius;
     private IMixedRealityPointer leftHandPointer;
@@ -24,8 +34,8 @@ public class RadiusIndicatorHandler : MonoBehaviour {
     }
 
     private void Update () {
-        if ( !rotationActivated ) {
-            if ( !movementActivated ) {
+        if ( !RotationActivated ) {
+            if ( !MovementActivated ) {
 
                 foreach ( var inputSource in CoreServices.InputSystem.DetectedInputSources ) {
                     foreach ( var pointer in inputSource.Pointers ) {

@@ -5,19 +5,11 @@ using UnityEngine;
 
 public class ExportMesh : MonoBehaviour {
 
-    public string fileName = "ExportedScoliosisBrace.obj";
-    public MeshDeformer meshDeformer;
-    public float extrusionDistance = 3f;
+    [SerializeField] 
+    private string fileName = "ExportedScoliosisBrace.obj";
 
-    private class VertexPair {
-        public int InnerWallVert { get; set; }
-        public int OuterWallVert { get; set; }
-
-        public VertexPair ( int innerWallVert, int outerWallVert ) {
-            InnerWallVert = innerWallVert;
-            OuterWallVert = outerWallVert;
-        }
-    }
+    [SerializeField] 
+    private float extrusionDistance = 3f;
 
     private class VertexData {
         public Vector3 Vertex { get; set; }
@@ -41,12 +33,15 @@ public class ExportMesh : MonoBehaviour {
         }
     }
 
-    private List<VertexData> vertexInfo = new();
     private int index;
-    private int[] topEdgeIndices, bottomEdgeIndices;
+    private MeshDeformer meshDeformer;
+
+    private void Start () {
+        meshDeformer = GetComponent<MeshDeformer>();
+    }
 
     public void ExtrudeMesh () {
-        Mesh innerWall = meshDeformer.deformedMesh;
+        Mesh innerWall = meshDeformer.DeformedMesh;
         Mesh mesh = Instantiate( innerWall );
  
         mesh = SimplifyMesh( mesh );
@@ -63,8 +58,6 @@ public class ExportMesh : MonoBehaviour {
             newVertices[ i + mesh.vertices.Length ] = vertices[ i ] + ( new Vector3( mesh.normals[ i ].x, 0, mesh.normals[ i ].z ) * extrusionDistance );
         }
 
-        FindEdgeVertices( vertices );
-
         for ( int i = 0; i < triangles.Length; i += 3 ) {
             newTriangles[ i + triangles.Length ] = triangles[ i ] + vertices.Length;
             newTriangles[ i + triangles.Length + 1 ] = triangles[ i + 1 ] + vertices.Length;
@@ -73,12 +66,6 @@ public class ExportMesh : MonoBehaviour {
 
         mesh.vertices = newVertices;
         mesh.triangles = newTriangles;
-
-        VertexPair[] vertexPairs = new VertexPair[ vertices.Length ];
-        for ( int i = 0; i < vertices.Length / 2; i++ ) {
-            vertexPairs[ i ] = new VertexPair( i, i + vertices.Length );
-        }
-
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
 
@@ -91,11 +78,12 @@ public class ExportMesh : MonoBehaviour {
     private Mesh SimplifyMesh ( Mesh mesh ) {
         Vector3[] startingVertices = mesh.vertices;
         int[] startingTriangles = mesh.triangles;
+        List<VertexData> vertexInfo = new();
 
         //For each unique index in the vertices array, add all occurences of the vertex in the oldIndices list and add that vertex to the vertexInfo array
         for ( int i = 0; i < startingVertices.Length; i++ ) {
             Vector3 tempVertex = startingVertices[ i ];
-            bool foundInArray = CheckIfExists( tempVertex );
+            bool foundInArray = CheckIfExists( tempVertex, vertexInfo );
 
             if ( foundInArray )
                 vertexInfo[ index ].OldIndices.Add( i );
@@ -143,38 +131,7 @@ public class ExportMesh : MonoBehaviour {
         return newMesh;
     }
 
-    private void FindEdgeVertices ( Vector3[] vertices ) {
-        float topPoint = vertices[ 0 ].y;
-        float bottomPoint = vertices[ 0 ].y;
-
-        for ( int i = 1; i < vertices.Length; i++ ) {
-            if ( vertices[ i ].y > topPoint )
-                topPoint = vertices[ i ].y;
-            if ( vertices[ i ].y < bottomPoint )
-                bottomPoint = vertices[ i ].y;
-        }
-
-        List<int> topEdge = new();
-        List<int> bottomEdge = new();
-        for (int i = 0; i < vertices.Length; i++ ) {
-            if ( vertices[ i ].y <= topPoint + 0.01 && vertices[i].y >= topPoint - 0.01 )
-                topEdge.Add( i );
-            else if ( vertices[i].y <= bottomPoint + 0.01 && vertices[i].y >= bottomPoint - 0.01 )
-                bottomEdge.Add( i );
-        }
-
-        topEdgeIndices = new int[ topEdge.Count ];
-        for (int i = 0; i < topEdge.Count; i++ ) {
-            topEdgeIndices[ i ] = topEdge[ i ];
-        }
-
-        bottomEdgeIndices = new int[ bottomEdge.Count ];
-        for ( int i = 0; i < bottomEdge.Count; i++ ) {
-            bottomEdgeIndices[ i ] = bottomEdge[ i ];
-        }
-    }
-
-    private bool CheckIfExists ( Vector3 vertex ) {
+    private bool CheckIfExists ( Vector3 vertex, List<VertexData> vertexInfo ) {
         for ( int i = 0; i < vertexInfo.Count; i++ ) {
             if ( vertexInfo[ i ].Vertex == vertex ) {
                 index = i;
@@ -184,32 +141,65 @@ public class ExportMesh : MonoBehaviour {
         return false;
     }
 
-    private void Export ( GameObject gameObject ) {
-        string filePath = Application.dataPath;
-        filePath = Path.Combine( filePath, string.Concat( "Exports\\", fileName ) );
-        filePath = Path.GetFullPath( filePath );
+    private async void Export ( GameObject gameObject ) {
 
-        if ( File.Exists( filePath ) )
-            File.Delete( filePath );
+        //For exporting on computer
+        #if UNITY_EDITOR
+            string filePath = Application.dataPath;
+            filePath = Path.Combine( filePath, string.Concat( "Exports\\", fileName ) );
+            filePath = Path.GetFullPath( filePath );
 
-        Mesh mesh = gameObject.GetComponent<MeshFilter>().mesh;
-        Vector3[] vertices = mesh.vertices;
-        Vector3[] normals = mesh.normals;
-        int[] triangles = mesh.triangles;
+            if ( File.Exists( filePath ) )
+                File.Delete( filePath );
 
-        try {
-            FileStream stream = new( filePath, FileMode.CreateNew );
-            using ( StreamWriter fileWriter = new( stream ) ) {
-                for ( int i = 0; i < vertices.Length; i++ ) {
-                    fileWriter.Write( $"v {vertices[ i ].x} {vertices[ i ].y} {vertices[ i ].z}\n" );
+            Mesh mesh = gameObject.GetComponent<MeshFilter>().mesh;
+            Vector3[] vertices = mesh.vertices;
+            Vector3[] normals = mesh.normals;
+            int[] triangles = mesh.triangles;
+
+            try {
+                FileStream stream = new( filePath, FileMode.CreateNew );
+                using ( StreamWriter fileWriter = new( stream ) ) {
+                    for ( int i = 0; i < vertices.Length; i++ ) {
+                        fileWriter.Write( $"v {vertices[ i ].x} {vertices[ i ].y} {vertices[ i ].z}\n" );
+                    }
+                    for ( int i = 0; i < normals.Length; i++ ) {
+                        fileWriter.Write( $"vn {normals[ i ].x} {normals[ i ].y} {normals[ i ].z}\n" );
+                    }
+                    for ( int i = 0; i < triangles.Length; i += 3 ) {
+                        fileWriter.Write( $"f {triangles[ i ] + 1}//{triangles[ i ] + 1} {triangles[ i + 1 ] + 1}//{triangles[ i + 1 ] + 1} {triangles[ i + 2 ] + 1}//{triangles[ i + 2 ] + 1}\n" );
+                    }
                 }
-                for ( int i = 0; i < normals.Length; i++ ) {
-                    fileWriter.Write( $"vn {normals[ i ].x} {normals[ i ].y} {normals[ i ].z}\n" );
-                }
-                for ( int i = 0; i < triangles.Length; i += 3 ) {
-                    fileWriter.Write( $"f {triangles[ i ] + 1}//{triangles[ i ] + 1} {triangles[ i + 1 ] + 1}//{triangles[ i + 1 ] + 1} {triangles[ i + 2 ] + 1}//{triangles[ i + 2 ] + 1}\n" );
-                }
+            } catch { }
+        #endif
+
+        //For exporting on HoloLens
+        #if UNITY_WSA && !UNITY_EDITOR
+            Windows.Storage.StorageFolder storageFolder = Windows.Storage.KnownFolders.DocumentsLibrary;
+            Windows.Storage.StorageFile exportedFile = await storageFolder.CreateFileAsync( "ExportedScoliosisBrace.obj", Windows.Storage.CreationCollisionOption.ReplaceExisting );
+
+            Mesh mesh = gameObject.GetComponent<MeshFilter>().mesh;
+            Vector3[] vertices = mesh.vertices;
+            Vector3[] normals = mesh.normals;
+            int[] triangles = mesh.triangles;
+
+            var stream = await exportedFile.OpenAsync( Windows.Storage.FileAccessMode.ReadWrite );
+            using ( var outputStream = stream.GetOutputStreamAt( 0 ) ) {
+                using ( var fileWriter = new Windows.Storage.Streams.DataWriter( outputStream ) ) {
+                    for ( int i = 0; i < vertices.Length; i++ ) {
+                        fileWriter.WriteString( $"v {vertices[ i ].x} {vertices[ i ].y} {vertices[ i ].z}\n" );
+                    }
+                    for ( int i = 0; i < normals.Length; i++ ) {
+                        fileWriter.WriteString( $"vn {normals[ i ].x} {normals[ i ].y} {normals[ i ].z}\n" );
+                    }
+                    for ( int i = 0; i < triangles.Length; i += 3 ) {
+                        fileWriter.WriteString( $"f {triangles[ i ] + 1}//{triangles[ i ] + 1} {triangles[ i + 1 ] + 1}//{triangles[ i + 1 ] + 1} {triangles[ i + 2 ] + 1}//{triangles[ i + 2 ] + 1}\n" );
+                    }
+                    await fileWriter.StoreAsync();
+                    await outputStream.FlushAsync();
+                }    
             }
-        } catch { }
+            stream.Dispose();
+        #endif
     }
 }  

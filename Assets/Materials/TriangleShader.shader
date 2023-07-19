@@ -1,5 +1,5 @@
-//Originial code sourced from: https://forum.unity.com/threads/program-a-shader-that-only-displays-the-visible-edges.773534/
-// Modifications made by Maya Daniels to add a base colour
+//Original code sourced from: https://forum.unity.com/threads/program-a-shader-that-only-displays-the-visible-edges.773534/
+//Modifications made by Maya Daniels to add a base colour
 
 Shader "Custom/TriangleShader" {
     Properties {

@@ -156,13 +156,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectionRadius: 0.075
-  storedVertices: []
-  displacedVertices: []
-  scoliosisBraceObject: {fileID: 46922193}
-  deformedMesh: {fileID: -2432090755550338912, guid: 7e682fbd603abcf4cb3f0f6890230d5b, type: 3}
-  defaultMaterial: {fileID: 2100000, guid: ad7678afa1b0a3242b330b67481eccf7, type: 2}
-  rotationActivated: 0
-  movementActivated: 0
 --- !u!64 &46922196
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -278,8 +271,6 @@ MonoBehaviour:
   meshDeformer: {fileID: 1782916490}
   opaqueMaterial: {fileID: 2100000, guid: 33d89c6cb4ea7324ea3cac5886e8f669, type: 2}
   transparentMaterial: {fileID: 2100000, guid: 5b6d745c869823b45b8ab23c146a76de, type: 2}
-  rotationActivated: 0
-  movementActivated: 0
 --- !u!114 &594410430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1178,19 +1169,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8164078558771037576, guid: cfa883bd59ac879498bb83e4bbdb6ca3, type: 3}
   m_PrefabInstance: {fileID: 929363126}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1782916483
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1782916478}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d645983cab92db243bd38a85cafb8efb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  meshDeformer: {fileID: 1782916490}
 --- !u!114 &1782916484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1203,8 +1181,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f591330c784816d4487741030b94abb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshDeformer: {fileID: 1782916490}
-  pinchSlider: {fileID: 1886592711}
 --- !u!64 &1782916486
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1232,13 +1208,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectionRadius: 0.075
-  storedVertices: []
-  displacedVertices: []
-  scoliosisBraceObject: {fileID: 1782916478}
-  deformedMesh: {fileID: -2432090755550338912, guid: cfa883bd59ac879498bb83e4bbdb6ca3, type: 3}
-  defaultMaterial: {fileID: 2100000, guid: ad7678afa1b0a3242b330b67481eccf7, type: 2}
-  rotationActivated: 0
-  movementActivated: 0
 --- !u!114 &1782916492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1251,7 +1220,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92439ebe50c478840bdd42507fa0a807, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshDeformer: {fileID: 1782916490}
   radiusIndicatorHandler: {fileID: 576069933}
 --- !u!114 &1782916493
 MonoBehaviour:
@@ -1334,7 +1302,7 @@ MonoBehaviour:
   vertexMaterial: {fileID: 2100000, guid: f96a3473ac7237a4d8ba532f5370e1da, type: 2}
   translucentMaterial: {fileID: 2100000, guid: 69887356576299b469cd8a1a5027d251, type: 2}
   opaqueMaterial: {fileID: 2100000, guid: ad7678afa1b0a3242b330b67481eccf7, type: 2}
-  fourthOption: {fileID: 2100000, guid: cee239e059332384e80ffc0a2fd275e1, type: 2}
+  fourthOption: {fileID: 2100000, guid: 32c81a76f01443a9925d72e1d120e23c, type: 2}
 --- !u!4 &1782916498 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: cfa883bd59ac879498bb83e4bbdb6ca3, type: 3}
@@ -1440,7 +1408,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fileName: ExportedScoliosisBrace.obj
-  meshDeformer: {fileID: 1782916490}
   extrusionDistance: 3
 --- !u!114 &1784620424
 MonoBehaviour:
@@ -1795,6 +1762,26 @@ PrefabInstance:
       propertyPath: iconQuadTexture
       value: 
       objectReference: {fileID: 2800000, guid: 559e1da0e65611c4f93ec931e1e6a8a2, type: 3}
+    - target: {fileID: 8086621932606736454, guid: e969038e4d67d9b498de2ef538969506, type: 3}
+      propertyPath: m_text
+      value: Say "Select"
+      objectReference: {fileID: 0}
+    - target: {fileID: 8086621932606736454, guid: e969038e4d67d9b498de2ef538969506, type: 3}
+      propertyPath: m_textAlignment
+      value: 65535
+      objectReference: {fileID: 0}
+    - target: {fileID: 8086621932606736454, guid: e969038e4d67d9b498de2ef538969506, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
+    - target: {fileID: 8086621932606736454, guid: e969038e4d67d9b498de2ef538969506, type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 8086621932606736454, guid: e969038e4d67d9b498de2ef538969506, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8264282566011063766, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: iconQuadTexture
       value: 
@@ -1836,14 +1823,14 @@ PrefabInstance:
     - target: {fileID: 9205671806015703372, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1782916483}
+      objectReference: {fileID: 1782916490}
     - target: {fileID: 9205671806015703372, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: UndoChange
       objectReference: {fileID: 0}
     - target: {fileID: 9205671806015703372, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Undo, Assembly-CSharp
+      value: MeshDeformer, Assembly-CSharp
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1765997328749114910, guid: e969038e4d67d9b498de2ef538969506, type: 3}
@@ -1895,17 +1882,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 48114245917028299, guid: a98b12187917b9a4c9cb14caa7e2706c, type: 3}
   m_PrefabInstance: {fileID: 920490943}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1886592711 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 48114245917028293, guid: a98b12187917b9a4c9cb14caa7e2706c, type: 3}
-  m_PrefabInstance: {fileID: 920490943}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1886592708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d11c9594c7919e41991b47c0a9275f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &3794895293304610
 Transform:
   m_ObjectHideFlags: 0
@@ -9984,7 +9960,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4bdbcb5c6db2814ba9850064e21eee2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menu: {fileID: 1980633117648072678}
 --- !u!23 &9137687109337209630
 MeshRenderer:
   m_ObjectHideFlags: 0
