@@ -4,10 +4,17 @@ using UnityEngine;
 
 public class ShaderOptions : MonoBehaviour {
 
-    public Material vertexMaterial;
-    public Material translucentMaterial;
-    public Material opaqueMaterial;
-    public Material fourthOption;
+    [SerializeField]
+    private Material vertexMaterial;
+
+    [SerializeField]
+    private Material translucentMaterial;
+
+    [SerializeField]
+    private Material opaqueMaterial;
+
+    [SerializeField]
+    private Material fourthOption;
 
     public void SetToVertex () {
         GetComponent<Renderer>().material = vertexMaterial;

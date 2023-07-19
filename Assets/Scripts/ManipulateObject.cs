@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class ManipulateObject : MonoBehaviour {
 
-    public MeshDeformer meshDeformer;
-    public RadiusIndicatorHandler radiusIndicatorHandler;
+    [SerializeField]
+    private RadiusIndicatorHandler radiusIndicatorHandler;
 
     private BoundsControl boundsControl;
     private BoxCollider boxCollider;
     private ObjectManipulator objectManipulator;
     private RotationAxisConstraint rotationAxisConstraint;
+    private MeshDeformer meshDeformer; 
 
     private void Start () {
+        meshDeformer = GetComponent<MeshDeformer>();
+
         rotationAxisConstraint = GetComponent<RotationAxisConstraint>();
         rotationAxisConstraint.enabled = false;
         objectManipulator = GetComponent<ObjectManipulator>();
@@ -24,40 +27,40 @@ public class ManipulateObject : MonoBehaviour {
     }
 
     public void ActivateBoundsControl () {
-        meshDeformer.rotationActivated = !meshDeformer.rotationActivated;
-        radiusIndicatorHandler.rotationActivated = !radiusIndicatorHandler.rotationActivated;
+        meshDeformer.RotationActivated = !meshDeformer.RotationActivated;
+        radiusIndicatorHandler.RotationActivated = !radiusIndicatorHandler.RotationActivated;
 
-        if ( meshDeformer.movementActivated ) {
-            meshDeformer.movementActivated = !meshDeformer.movementActivated;
-            radiusIndicatorHandler.movementActivated = !radiusIndicatorHandler.movementActivated;
+        if ( meshDeformer.MovementActivated ) {
+            meshDeformer.MovementActivated = !meshDeformer.MovementActivated;
+            radiusIndicatorHandler.MovementActivated = !radiusIndicatorHandler.MovementActivated;
 
             objectManipulator.enabled = false;
             rotationAxisConstraint.enabled = false;
         }
 
-        boxCollider.enabled = meshDeformer.rotationActivated;
-        boundsControl.rotationHandlesConfiguration.ShowHandleForX = meshDeformer.rotationActivated;
-        boundsControl.rotationHandlesConfiguration.ShowHandleForY = meshDeformer.rotationActivated;
-        boundsControl.rotationHandlesConfiguration.ShowHandleForZ = meshDeformer.rotationActivated;
-        boundsControl.Active = meshDeformer.rotationActivated;        
+        boxCollider.enabled = meshDeformer.RotationActivated;
+        boundsControl.rotationHandlesConfiguration.ShowHandleForX = meshDeformer.RotationActivated;
+        boundsControl.rotationHandlesConfiguration.ShowHandleForY = meshDeformer.RotationActivated;
+        boundsControl.rotationHandlesConfiguration.ShowHandleForZ = meshDeformer.RotationActivated;
+        boundsControl.Active = meshDeformer.RotationActivated;        
     }
 
     public void ActivateObjectManipulation () {
-        meshDeformer.movementActivated = !meshDeformer.movementActivated;
-        radiusIndicatorHandler.movementActivated = !radiusIndicatorHandler.movementActivated;
+        meshDeformer.MovementActivated = !meshDeformer.MovementActivated;
+        radiusIndicatorHandler.MovementActivated = !radiusIndicatorHandler.MovementActivated;
 
-        if ( meshDeformer.rotationActivated ) {
-            meshDeformer.rotationActivated = !meshDeformer.rotationActivated;
-            radiusIndicatorHandler.rotationActivated = !radiusIndicatorHandler.rotationActivated;
+        if ( meshDeformer.RotationActivated ) {
+            meshDeformer.RotationActivated = !meshDeformer.RotationActivated;
+            radiusIndicatorHandler.RotationActivated = !radiusIndicatorHandler.RotationActivated;
 
             boundsControl.rotationHandlesConfiguration.ShowHandleForX = false;
             boundsControl.rotationHandlesConfiguration.ShowHandleForY = false;
             boundsControl.rotationHandlesConfiguration.ShowHandleForZ = false;
         }
 
-        boxCollider.enabled = meshDeformer.rotationActivated;
-        boundsControl.Active = meshDeformer.movementActivated;
-        rotationAxisConstraint.enabled = meshDeformer.movementActivated;
-        objectManipulator.enabled = meshDeformer.movementActivated;
+        boxCollider.enabled = meshDeformer.RotationActivated;
+        boundsControl.Active = meshDeformer.MovementActivated;
+        rotationAxisConstraint.enabled = meshDeformer.MovementActivated;
+        objectManipulator.enabled = meshDeformer.MovementActivated;
     }
 }

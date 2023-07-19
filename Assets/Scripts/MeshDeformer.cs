@@ -7,18 +7,15 @@ public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
 
     [Range( 0.05f, 0.1f )]
     public float selectionRadius = 0.075f;
-    public Vector3[] storedVertices, displacedVertices;
-    public GameObject scoliosisBraceObject;
-    public Mesh deformedMesh;
-    public PointOctree<VertexData> octree;
-    public Material defaultMaterial;
-    public bool rotationActivated = false;
-    public bool movementActivated = false;
 
-    public class VertexData {
+    public Mesh DeformedMesh { get; set; }
+    public bool RotationActivated { get; set; } = false;
+    public bool MovementActivated { get; set; } = false;
+
+    private class VertexData {
         public Vector3 Position { get; set; }
         public int Index { get; set; }
-
+         
         public VertexData ( Vector3 position, int index ) {
             Position = position;
             Index = index;
@@ -26,12 +23,11 @@ public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
     }
 
     private bool vertexSelected = false;
-    private readonly float minSize = 0.5f;
-    private readonly float maxSize = 100f;
-    private Vector3 selectedVertex, previousHandPosition, center;
+    private Vector3 selectedVertex, previousHandPosition;
     private int[] nearbyIndices;
-    private Vector3[] originalVertices, transformedVertices, nearbyVertices;
+    private Vector3[] originalVertices, transformedVertices, nearbyVertices, storedVertices, displacedVertices;
     private VertexData[] nearbyVertexData;
+    private PointOctree<VertexData> octree;
 
     private void Start () {
         CoreServices.InputSystem.RegisterHandler<IMixedRealityPointerHandler>( this );
@@ -54,18 +50,18 @@ public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
             reversedTriangles[ i + 2 ] = triangles[ i + 1 ];
         }
 
-        deformedMesh = new Mesh {
+        DeformedMesh = new() {
             vertices = vertices,
             normals = reversedNormals,
             triangles = reversedTriangles
         };
 
-        GetComponent<MeshFilter>().mesh = deformedMesh;
+        GetComponent<MeshFilter>().mesh = DeformedMesh;
         MeshCollider meshCollider = GetComponent<MeshCollider>();
         meshCollider.sharedMesh = null;
-        meshCollider.sharedMesh = deformedMesh;
+        meshCollider.sharedMesh = DeformedMesh;
 
-        originalVertices = storedVertices = deformedMesh.vertices;
+        originalVertices = storedVertices = DeformedMesh.vertices;
 
         displacedVertices = new Vector3[ originalVertices.Length ];
         transformedVertices = new Vector3[ originalVertices.Length ];
@@ -74,14 +70,10 @@ public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
             transformedVertices[ i ] = transform.TransformPoint( originalVertices[ i ] );
         }
 
-        center = transform.position;
-
-        octree = new PointOctree<VertexData>( maxSize, center, minSize );
+        octree = new PointOctree<VertexData>( 100f, transform.position, 0.5f ); // maxSize = 100f, center = transform.position, minSize = 0.5f
         for ( int i = 0; i < transformedVertices.Length; i++ ) {
             octree.Add( new VertexData( transformedVertices[ i ], i ), transformedVertices[ i ] );
         }
-
-        scoliosisBraceObject.GetComponent<Renderer>().material = defaultMaterial;
     }
 
     private void OnDestroy () {
@@ -89,12 +81,12 @@ public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
     }
 
     public void OnPointerDown ( MixedRealityPointerEventData eventData ) {
-        if ( !rotationActivated ) {
-            if (!movementActivated) {
+        if ( !RotationActivated ) {
+            if (!MovementActivated) {
                 var pointerResult = eventData.Pointer.Result;
 
                 try {
-                    if ( pointerResult.CurrentPointerTarget == scoliosisBraceObject ) {
+                    if ( pointerResult.CurrentPointerTarget == gameObject ) {
                         previousHandPosition = pointerResult.StartPoint;
                         Vector3 currentPositionOnSphere = pointerResult.Details.Point;
 
@@ -142,9 +134,8 @@ public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
             nearbyIndices[ i ] = nearbyVertexData[ i ].Index;
         }
 
-        if ( nearbyVertices.Length == 0 ) {
+        if ( nearbyVertices.Length == 0 )
             return Vector3.positiveInfinity;
-        }
 
         Vector3 closestVertex = nearbyVertices[ 0 ];
         float minDistanceSqr = ( closestVertex - hitPoint ).sqrMagnitude;
@@ -166,12 +157,12 @@ public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
             transformedVertices[ index ] = newPositions[ i ];
             displacedVertices[ index ] = transform.InverseTransformPoint( transformedVertices[ index ] );
         }
-        deformedMesh.vertices = displacedVertices;
-        deformedMesh.RecalculateNormals();
+        DeformedMesh.vertices = displacedVertices;
+        DeformedMesh.RecalculateNormals();
     }
 
     public void RefreshOctree () {
-        octree = new PointOctree<VertexData>( maxSize, center, minSize );
+        octree = new PointOctree<VertexData>( 100f, transform.position, 0.5f );
 
         for ( int i = 0; i < displacedVertices.Length; i++ ) {
             transformedVertices[ i ] = transform.TransformPoint( displacedVertices[ i ] );
@@ -180,13 +171,20 @@ public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
 
         MeshCollider meshCollider = GetComponent<MeshCollider>();
         meshCollider.sharedMesh = null;
-        meshCollider.sharedMesh = deformedMesh;
+        meshCollider.sharedMesh = DeformedMesh;
+    }
+
+    public void UndoChange () {
+        displacedVertices = storedVertices;
+        DeformedMesh.vertices = displacedVertices;
+        DeformedMesh.RecalculateNormals();
+        RefreshOctree();
     }
 
     public void ResetMesh () {
-        deformedMesh.vertices = originalVertices;
+        DeformedMesh.vertices = originalVertices;
         displacedVertices = storedVertices = (Vector3[])originalVertices.Clone();
-        deformedMesh.RecalculateNormals();
+        DeformedMesh.RecalculateNormals();
         RefreshOctree();
     }
 }
