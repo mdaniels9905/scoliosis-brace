@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\Undo.cs" />
     <Compile Include="Assets\Scripts\NewMesh.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\BoundsControl\Scripts\BoundsControlRuntimeExample.cs" />
+    <Compile Include="Assets\Scripts\ToggleButtonColor.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - Boundary\Scripts\BoundaryVisualizationDemo.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\ProgressIndicator\Scripts\ProgressIndicatorDemoAsyncMethod.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\Dialog\Scripts\DialogExampleController.cs" />
@@ -82,18 +83,17 @@
     <Compile Include="Assets\Scripts\FindEdgeVertices.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\Dwell\ToggleDwellSample.cs" />
     <Compile Include="Assets\Scripts\PointOctreeNode.cs" />
+    <Compile Include="Assets\Scripts\MoveButtonToggler.cs" />
     <Compile Include="Assets\Scripts\PointOctree.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\Slider\Scripts\SliderLunarLander.cs" />
     <Compile Include="Assets\Ciconia Studio\_Shared Files\Scripts\Demo\FreeCam.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\ProgressIndicator\Scripts\ProgressIndicatorDemoSceneLoad.cs" />
     <Compile Include="Assets\Ciconia Studio\_Shared Files\Scripts\Demo\SuperCamera.cs" />
+    <Compile Include="Assets\Scripts\RotateButtonToggler.cs" />
     <Compile Include="Assets\Scripts\RadiusIndicatorHandler.cs" />
     <Compile Include="Assets\Ciconia Studio\_Shared Files\Scripts\Demo\FreeCamera.cs" />
     <Compile Include="Assets\Scripts\ShaderOptions.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\Dwell\ListItemDwell.cs" />
-    <Compile Include="Assets\Scripts\ToggleButtonColor.cs" />
-    <Compile Include="Assets\Scripts\MoveButtonToggler.cs" />
-    <Compile Include="Assets\Scripts\RotateButtonToggler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
