@@ -675,6 +675,7 @@ PlayerSettings:
   platformCapabilities:
     WindowsStoreApps:
       SpatialPerception: True
+      PicturesLibrary: True
       InternetClient: True
       Microphone: True
   metroTargetDeviceFamilies: {}

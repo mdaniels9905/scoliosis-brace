@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -8,10 +9,20 @@ public class ExportMesh : MonoBehaviour {
     [SerializeField] 
     private string fileName = "ExportedScoliosisBrace.obj";
 
+    [SerializeField]
+    private GameObject progressIndicator;
+
+    [SerializeField]
+    private GameObject sceneObjects;
+
+    [SerializeField]
+    private GameObject menu;
+
     [SerializeField] 
     private float extrusionDistance = 3f;
 
     private class VertexData {
+
         public Vector3 Vertex { get; set; }
         public List<int> OldIndices { get; set; }
         public int Number { get; set; }
@@ -40,11 +51,20 @@ public class ExportMesh : MonoBehaviour {
         meshDeformer = GetComponent<MeshDeformer>();
     }
 
-    public void ExtrudeMesh () {
+    public void StartProcessing () {
+        progressIndicator.SetActive( true );
+        sceneObjects.transform.localScale = Vector3.zero;
+        menu.transform.localScale = Vector3.zero;
+
+        StartCoroutine( ExtrudeMesh() );   
+    }
+
+    private IEnumerator ExtrudeMesh () {
         Mesh innerWall = meshDeformer.DeformedMesh;
         Mesh mesh = Instantiate( innerWall );
- 
-        mesh = SimplifyMesh( mesh );
+
+        yield return StartCoroutine( SimplifyMesh( mesh, simplifiedMesh => { mesh = simplifiedMesh; } ) );
+
         Vector3[] vertices = mesh.vertices;
         int[] triangles = mesh.triangles;
 
@@ -69,13 +89,14 @@ public class ExportMesh : MonoBehaviour {
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
 
-        GameObject newObject = new();
-        newObject.AddComponent<MeshFilter>().mesh = mesh;
-
-        Export( newObject );
+        GameObject extrudedObject = new();
+        extrudedObject.AddComponent<MeshFilter>().mesh = mesh;
+        Export( extrudedObject );
+        
+        yield return null;
     }
 
-    private Mesh SimplifyMesh ( Mesh mesh ) {
+    private IEnumerator SimplifyMesh ( Mesh mesh, Action<Mesh> callback ) {
         Vector3[] startingVertices = mesh.vertices;
         int[] startingTriangles = mesh.triangles;
         List<VertexData> vertexInfo = new();
@@ -89,6 +110,8 @@ public class ExportMesh : MonoBehaviour {
                 vertexInfo[ index ].OldIndices.Add( i );
             else
                 vertexInfo.Add( new VertexData( tempVertex, new List<int>() { i }, 0 ) );
+
+            yield return null;
         }
 
         //Loop through all triangles and replace all occurences of indices in oldIndices with the new one
@@ -125,10 +148,10 @@ public class ExportMesh : MonoBehaviour {
             vertices = updatedVertices,
             triangles = newTriangles
         };
+
         newMesh.RecalculateBounds();
         newMesh.RecalculateNormals();
-
-        return newMesh;
+        callback( newMesh );
     }
 
     private bool CheckIfExists ( Vector3 vertex, List<VertexData> vertexInfo ) {
@@ -142,7 +165,6 @@ public class ExportMesh : MonoBehaviour {
     }
 
     private async void Export ( GameObject gameObject ) {
-
         //For exporting on computer
         #if UNITY_EDITOR
             string filePath = Application.dataPath;
@@ -161,13 +183,13 @@ public class ExportMesh : MonoBehaviour {
                 FileStream stream = new( filePath, FileMode.CreateNew );
                 using ( StreamWriter fileWriter = new( stream ) ) {
                     for ( int i = 0; i < vertices.Length; i++ ) {
-                        fileWriter.Write( $"v {vertices[ i ].x} {vertices[ i ].y} {vertices[ i ].z}\n" );
+                        await fileWriter.WriteAsync( $"v {vertices[ i ].x} {vertices[ i ].y} {vertices[ i ].z}\n" );
                     }
                     for ( int i = 0; i < normals.Length; i++ ) {
-                        fileWriter.Write( $"vn {normals[ i ].x} {normals[ i ].y} {normals[ i ].z}\n" );
+                        await fileWriter.WriteAsync( $"vn {normals[ i ].x} {normals[ i ].y} {normals[ i ].z}\n" );
                     }
                     for ( int i = 0; i < triangles.Length; i += 3 ) {
-                        fileWriter.Write( $"f {triangles[ i ] + 1}//{triangles[ i ] + 1} {triangles[ i + 1 ] + 1}//{triangles[ i + 1 ] + 1} {triangles[ i + 2 ] + 1}//{triangles[ i + 2 ] + 1}\n" );
+                        await fileWriter.WriteAsync( $"f {triangles[ i ] + 1}//{triangles[ i ] + 1} {triangles[ i + 1 ] + 1}//{triangles[ i + 1 ] + 1} {triangles[ i + 2 ] + 1}//{triangles[ i + 2 ] + 1}\n" );
                     }
                 }
             } catch { }
@@ -175,7 +197,7 @@ public class ExportMesh : MonoBehaviour {
 
         //For exporting on HoloLens
         #if UNITY_WSA && !UNITY_EDITOR
-            Windows.Storage.StorageFolder storageFolder = Windows.Storage.KnownFolders.DocumentsLibrary;
+            Windows.Storage.StorageFolder storageFolder = Windows.Storage.KnownFolders.PicturesLibrary;
             Windows.Storage.StorageFile exportedFile = await storageFolder.CreateFileAsync( "ExportedScoliosisBrace.obj", Windows.Storage.CreationCollisionOption.ReplaceExisting );
 
             Mesh mesh = gameObject.GetComponent<MeshFilter>().mesh;
@@ -201,5 +223,9 @@ public class ExportMesh : MonoBehaviour {
             }
             stream.Dispose();
         #endif
+
+        progressIndicator.SetActive( false );
+        sceneObjects.transform.localScale = new( 0.01f, 0.01f, 0.01f );
+        menu.transform.localScale = Vector3.one;
     }
 }  
