@@ -2,6 +2,9 @@ using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit;
 using System;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Reflection;
+using UnityEngine.UIElements;
 
 public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
 
@@ -23,6 +26,30 @@ public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
         }
     }
 
+    private class VertexStuff {
+
+        public Vector3 Vertex { get; set; }
+        public List<int> OldIndices { get; set; }
+        public int Number { get; set; }
+
+        public VertexStuff ( Vector3 vertex, List<int> oldIndices, int number ) {
+            Vertex = vertex;
+            OldIndices = oldIndices;
+            Number = number;
+        }
+    }
+
+    private class TriangleData {
+        public int TriangleIndex { get; set; }
+        public bool Changed { get; set; }
+
+        public TriangleData ( int triangleIndex, bool changed ) {
+            TriangleIndex = triangleIndex;
+            Changed = changed;
+        }
+    }
+
+    private int index;
     private bool vertexSelected = false;
     private Vector3 selectedVertex, previousHandPosition;
     private int[] nearbyIndices;
@@ -57,10 +84,14 @@ public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
             triangles = reversedTriangles
         };
 
+        Debug.Log( "Before: " + DeformedMesh.vertices.Length );
+        DeformedMesh = SimplifyMesh( DeformedMesh );
         GetComponent<MeshFilter>().mesh = DeformedMesh;
+
         MeshCollider meshCollider = GetComponent<MeshCollider>();
         meshCollider.sharedMesh = null;
         meshCollider.sharedMesh = DeformedMesh;
+        Debug.Log("After: " + meshCollider.sharedMesh.vertices.Length );
 
         originalVertices = storedVertices = DeformedMesh.vertices;
 
@@ -75,6 +106,74 @@ public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
         for ( int i = 0; i < transformedVertices.Length; i++ ) {
             octree.Add( new VertexData( transformedVertices[ i ], i ), transformedVertices[ i ] );
         }
+    }
+
+    private Mesh SimplifyMesh ( Mesh mesh ) {
+        Vector3[] startingVertices = mesh.vertices;
+        int[] startingTriangles = mesh.triangles;
+        List<VertexStuff> vertexInfo = new();
+
+        //For each unique index in the vertices array, add all occurences of the vertex in the oldIndices list and add that vertex to the vertexInfo array
+        for ( int i = 0; i < startingVertices.Length; i++ ) {
+            Vector3 tempVertex = startingVertices[ i ];
+            bool foundInArray = CheckIfExists( tempVertex, vertexInfo );
+
+            if ( foundInArray )
+                vertexInfo[ index ].OldIndices.Add( i );
+            else
+                vertexInfo.Add( new VertexStuff( tempVertex, new List<int>() { i }, 0 ) );
+
+        }
+
+        //Loop through all triangles and replace all occurences of indices in oldIndices with the new one
+        List<TriangleData> triangleInfo = new();
+        for ( int i = 0; i < startingTriangles.Length; i++ ) {
+            triangleInfo.Add( new TriangleData( startingTriangles[ i ], false ) );
+        }
+
+        for ( int i = 0; i < vertexInfo.Count; i++ ) {
+            List<int> oldIndices = vertexInfo[ i ].OldIndices;
+            int newIndex = i;
+
+            for ( int index = 0; index < oldIndices.Count; index++ ) {
+                for ( int j = 0; j < triangleInfo.Count; j++ ) {
+                    if ( oldIndices[ index ] == triangleInfo[ j ].TriangleIndex && triangleInfo[ j ].Changed == false ) {
+                        triangleInfo[ j ].TriangleIndex = newIndex;
+                        triangleInfo[ j ].Changed = true;
+                    }
+                }
+            }
+        }
+
+        int[] newTriangles = new int[ triangleInfo.Count ];
+        for ( int i = 0; i < newTriangles.Length; i++ ) {
+            newTriangles[ i ] = triangleInfo[ i ].TriangleIndex;
+        }
+
+        Vector3[] updatedVertices = new Vector3[ vertexInfo.Count ];
+        for ( int i = 0; i < updatedVertices.Length; i++ ) {
+            updatedVertices[ i ] = vertexInfo[ i ].Vertex;
+        }
+
+        Mesh newMesh = new() {
+            vertices = updatedVertices,
+            triangles = newTriangles
+        };
+
+        newMesh.RecalculateBounds();
+        newMesh.RecalculateNormals();
+
+        return newMesh;
+    }
+
+    private bool CheckIfExists ( Vector3 vertex, List<VertexStuff> vertexInfo ) {
+        for ( int i = 0; i < vertexInfo.Count; i++ ) {
+            if ( vertexInfo[ i ].Vertex == vertex ) {
+                index = i;
+                return true;
+            }
+        }
+        return false;
     }
 
     private void OnDestroy () {
