@@ -86,13 +86,10 @@ public class ExportMesh : MonoBehaviour {
         int[] newTriangles = new int[ mesh.triangles.Length * 2 ];
 
         Array.Copy( vertices, newVertices, mesh.vertices.Length );
-        //yield return null;
         Array.Copy( triangles, newTriangles, mesh.triangles.Length );
 
         int counter = 0;
         for ( int i = 0; i < mesh.vertices.Length; i++ ) {
-            //Vector3 normalizedNormal = mesh.normals[ i ].normalized;
-            //newVertices[ i + mesh.vertices.Length ] = vertices[ i ] + ( new Vector3( normalizedNormal.x, 0, normalizedNormal.z ) * extrusionDistance );
             newVertices[ i + mesh.vertices.Length ] = vertices[ i ] + ( new Vector3( mesh.normals[ i ].x, 0, mesh.normals[ i ].z ).normalized * extrusionDistance );
             counter++;
 
