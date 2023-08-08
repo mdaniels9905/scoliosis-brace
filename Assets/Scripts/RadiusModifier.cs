@@ -5,7 +5,7 @@ public class RadiusModifier : MonoBehaviour {
     
     private MeshDeformer meshDeformer;
 
-    private void Start () {
+    private void Awake () {
         meshDeformer = GetComponent<MeshDeformer>();
     }
 

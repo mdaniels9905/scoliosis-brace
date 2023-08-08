@@ -2,6 +2,8 @@ using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit;
 using System;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Collections;
 
 public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
 
@@ -11,6 +13,7 @@ public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
     public Mesh DeformedMesh { get; set; }
     public bool RotationActivated { get; set; } = false;
     public bool MovementActivated { get; set; } = false;
+    public bool DeformerActivated { get; set; } = true;
 
     private class VertexData {
         public Vector3 Position { get; set; }
@@ -19,6 +22,16 @@ public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
         public VertexData ( Vector3 position, int index ) {
             Position = position;
             Index = index;
+        }
+    }
+
+    private class TriangleData {
+        public int TriangleIndex { get; set; }
+        public bool Changed { get; set; }
+
+        public TriangleData ( int triangleIndex, bool changed ) {
+            TriangleIndex = triangleIndex;
+            Changed = changed;
         }
     }
 
@@ -83,22 +96,24 @@ public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
     public void OnPointerDown ( MixedRealityPointerEventData eventData ) {
         if ( !RotationActivated ) {
             if (!MovementActivated) {
-                var pointerResult = eventData.Pointer.Result;
+                if (DeformerActivated) {
+                    var pointerResult = eventData.Pointer.Result;
 
-                try {
-                    if ( pointerResult.CurrentPointerTarget == gameObject ) {
-                        previousHandPosition = pointerResult.StartPoint;
-                        Vector3 currentPositionOnSphere = pointerResult.Details.Point;
+                    try {
+                        if ( pointerResult.CurrentPointerTarget == gameObject ) {
+                            previousHandPosition = pointerResult.StartPoint;
+                            Vector3 currentPositionOnSphere = pointerResult.Details.Point;
 
-                        selectedVertex = GetSelectedVertices( currentPositionOnSphere, selectionRadius );
-                        if ( float.IsPositiveInfinity( selectedVertex.x ) && float.IsPositiveInfinity( selectedVertex.y ) && float.IsPositiveInfinity( selectedVertex.z ) ) {
-                            vertexSelected = false;
-                        } else {
-                            vertexSelected = true;
-                            storedVertices = (Vector3[])displacedVertices.Clone();
+                            selectedVertex = GetSelectedVertices( currentPositionOnSphere, selectionRadius );
+                            if ( float.IsPositiveInfinity( selectedVertex.x ) && float.IsPositiveInfinity( selectedVertex.y ) && float.IsPositiveInfinity( selectedVertex.z ) ) {
+                                vertexSelected = false;
+                            } else {
+                                vertexSelected = true;
+                                storedVertices = (Vector3[])displacedVertices.Clone();
+                            }
                         }
-                    }
-                } catch ( NullReferenceException ) { }
+                    } catch ( NullReferenceException ) { }
+                }
             }
         }
     }

@@ -135,7 +135,9 @@ PlayerSettings:
     16:9: 1
     Others: 1
   bundleVersion: 0.1
-  preloadedAssets: []
+  preloadedAssets:
+  - {fileID: -2267346491934073379, guid: 389a55194b718c442be0d7336613e8d4, type: 2}
+  - {fileID: -1119575311147657606, guid: 9dc99779705b37f44810281209dbfb8c, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -675,6 +677,7 @@ PlayerSettings:
   platformCapabilities:
     WindowsStoreApps:
       SpatialPerception: True
+      PicturesLibrary: True
       InternetClient: True
       Microphone: True
   metroTargetDeviceFamilies: {}
