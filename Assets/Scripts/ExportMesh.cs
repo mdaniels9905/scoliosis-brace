@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -28,18 +29,16 @@ public class ExportMesh : MonoBehaviour {
     [SerializeField]
     private float extrusionDistance = 3f;
 
-    private class VertexData {
+   /* private class VertexData {
 
         public Vector3 Vertex { get; set; }
         public List<int> OldIndices { get; set; }
-        public int Number { get; set; }
 
-        public VertexData ( Vector3 vertex, List<int> oldIndices, int number ) {
+        public VertexData ( Vector3 vertex, List<int> oldIndices ) {
             Vertex = vertex;
             OldIndices = oldIndices;
-            Number = number;
         }
-    }
+    }*/
 
     private class TriangleData {
         public int TriangleIndex { get; set; }
@@ -72,25 +71,27 @@ public class ExportMesh : MonoBehaviour {
 
     private IEnumerator ExtrudeMesh () {
         Mesh mesh = meshDeformer.DeformedMesh;
-        Vector3[] vertices = mesh.vertices;
-        int[] triangles = mesh.triangles;
-
-        progressBar.transform.localScale = new( 0.1f, 1, 1 );
+        
         progressText.text = "Simplifying mesh ...";
-        yield return StartCoroutine( SimplifyMesh( vertices, triangles, simplifiedMesh => { mesh = simplifiedMesh; } ) );
-        progressBar.transform.localScale = new( 0.3f, 1, 1 );
+        progressBar.transform.localScale = new( 0.1f, 1, 1 );
+        
+        mesh = SimplifyMesh( mesh.vertices, mesh.triangles );
 
         progressText.text = "Extruding mesh ...";
+        progressBar.transform.localScale = new( 0.3f, 1, 1 );
 
-        Vector3[] newVertices = new Vector3[ mesh.vertices.Length * 2 ];
-        int[] newTriangles = new int[ mesh.triangles.Length * 2 ];
+        Vector3[] vertices = mesh.vertices;  
+        Vector3[] newVertices = new Vector3[ vertices.Length * 2 ];
+        int[] triangles = mesh.triangles;
+        int[] newTriangles = new int[ triangles.Length * 2 ];
 
-        Array.Copy( vertices, newVertices, mesh.vertices.Length );
-        Array.Copy( triangles, newTriangles, mesh.triangles.Length );
+        Array.Copy( vertices, newVertices, vertices.Length );
+        Array.Copy( triangles, newTriangles, triangles.Length );
 
         int counter = 0;
         for ( int i = 0; i < mesh.vertices.Length; i++ ) {
             newVertices[ i + mesh.vertices.Length ] = vertices[ i ] + ( new Vector3( mesh.normals[ i ].x, 0, mesh.normals[ i ].z ).normalized * extrusionDistance );
+            
             counter++;
 
             if (counter % 15 == 0)
@@ -105,6 +106,7 @@ public class ExportMesh : MonoBehaviour {
             newTriangles[ i + triangles.Length ] = triangles[ i ] + vertices.Length;
             newTriangles[ i + triangles.Length + 1 ] = triangles[ i + 1 ] + vertices.Length;
             newTriangles[ i + triangles.Length + 2 ] = triangles[ i + 2 ] + vertices.Length;
+            
             counter++;
 
             if ( counter % 50 == 0 )
@@ -123,47 +125,48 @@ public class ExportMesh : MonoBehaviour {
         Export( extrudedObject );
     }
 
-    private IEnumerator SimplifyMesh ( Vector3[] startingVertices, int[] startingTriangles,  Action<Mesh> callback ) {
-        List<VertexData> vertexInfo = new();
-        int counter = 0;
+    private Mesh SimplifyMesh ( Vector3[] startingVertices, int[] startingTriangles ) {
+        Dictionary<Vector3, List<int>> vertexInfo = new();
 
         //For each unique index in the vertices array, add all occurences of the vertex in the oldIndices list and add that vertex to the vertexInfo array
-        for ( int i = 0; i < startingVertices.Length; i++ ) {
+        for ( int i = 0; i < startingVertices.Length; i++) {
             Vector3 tempVertex = startingVertices[ i ];
-            bool foundInArray = CheckIfExists( tempVertex, vertexInfo );
+            List<int> indexList = CheckIfExists( tempVertex, vertexInfo );
 
-            if ( foundInArray )
-                vertexInfo[ index ].OldIndices.Add( i );
+            if ( indexList != null )
+                indexList.Add( i );
             else
-                vertexInfo.Add( new VertexData( tempVertex, new List<int>() { i }, 0 ) );
-
-            counter++;
-            if ( counter % 10 == 0 )
-                yield return null;
-        }
-
-        //Loop through all triangles and replace all occurences of indices in oldIndices with the new one
-        List<TriangleData> triangleInfo = new();
-        for ( int i = 0; i < startingTriangles.Length; i++ ) {
-            triangleInfo.Add( new TriangleData( startingTriangles[ i ], false ) );
+                vertexInfo.Add( tempVertex, new List<int>() { i } );
         }
 
         progressBar.transform.localScale = new( 0.2f, 1, 1 );
+        
+        //Loop through all triangles and replace all occurences of indices in oldIndices with the new one
+        Dictionary<int, int> indexMap = new();
+        List<int>[] indexArray = vertexInfo.Values.ToArray();
 
-        for ( int i = 0; i < vertexInfo.Count; i++ ) {
-            List<int> oldIndices = vertexInfo[ i ].OldIndices;
-            int newIndex = i;
-
-            for ( int index = 0; index < oldIndices.Count; index++ ) {
-                for ( int j = 0; j < triangleInfo.Count; j++ ) {
-                    if ( oldIndices[ index ] == triangleInfo[ j ].TriangleIndex && triangleInfo[ j ].Changed == false ) {
-                        triangleInfo[ j ].TriangleIndex = newIndex;
-                        triangleInfo[ j ].Changed = true;
-                    }
-                }
+        int newIndex = 0;
+        int indexLengthCount = 0;
+        for (int i = 0; i < indexArray.Length; i++ ) {
+            List<int> tempList = indexArray[ i ];
+            for (int j = 0; j < tempList.Count; j++ ) {
+                indexLengthCount++;
+                indexMap.Add( tempList[ j ], newIndex );
             }
             
-            yield return null;
+            newIndex++;
+        }
+
+        List<TriangleData> triangleInfo = new();
+        for (int i = 0; i < startingTriangles.Length; i++ ) {
+            triangleInfo.Add( new TriangleData( startingTriangles[ i ], false ) );
+        }
+ 
+        for (int i = 0; i <  triangleInfo.Count; i++ ) { 
+            if ( indexMap.TryGetValue( triangleInfo[i].TriangleIndex, out int updatedIndex) && !triangleInfo[i].Changed) {
+                triangleInfo[ i ].TriangleIndex = updatedIndex;
+                triangleInfo[ i ].Changed = true;
+            }
         }
 
         int[] newTriangles = new int[ triangleInfo.Count ];
@@ -171,10 +174,7 @@ public class ExportMesh : MonoBehaviour {
             newTriangles[ i ] = triangleInfo[ i ].TriangleIndex;
         }
 
-        Vector3[] updatedVertices = new Vector3[ vertexInfo.Count ];
-        for ( int i = 0; i < updatedVertices.Length; i++ ) {
-            updatedVertices[ i ] = vertexInfo[ i ].Vertex;
-        }
+        Vector3[] updatedVertices = vertexInfo.Keys.ToArray();
 
         Mesh newMesh = new() {
             vertices = updatedVertices,
@@ -183,28 +183,24 @@ public class ExportMesh : MonoBehaviour {
 
         newMesh.RecalculateBounds();
         newMesh.RecalculateNormals();
-        callback( newMesh );
+
+        return newMesh;
+        
     }
 
-    private bool CheckIfExists ( Vector3 vertex, List<VertexData> vertexInfo ) {
-        for ( int i = 0; i < vertexInfo.Count; i++ ) {
-            if ( vertexInfo[ i ].Vertex == vertex ) {
-                index = i;
-                return true;
-            }
-        }
-        return false;
+    private List<int> CheckIfExists (Vector3 vertex, Dictionary<Vector3, List<int>> vertexInfo) {
+        if (vertexInfo.ContainsKey(vertex))
+            return vertexInfo[ vertex ];
+
+        return null;
     }
 
     private async void Export ( GameObject gameObject ) {
         progressText.text = "Export started ...";
 
         Mesh mesh = gameObject.GetComponent<MeshFilter>().mesh;
-        progressText.text = "Getting vertices ...";
         Vector3[] vertices = mesh.vertices;
-        progressText.text = "Getting normals ...";
         Vector3[] normals = mesh.normals;
-        progressText.text = "Getting triangles ...";
         int[] triangles = mesh.triangles;
         progressBar.transform.localScale = new( 0.6f, 1, 1 );
 
