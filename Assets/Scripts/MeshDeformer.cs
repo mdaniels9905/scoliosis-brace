@@ -2,8 +2,6 @@ using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit;
 using System;
 using UnityEngine;
-using System.Collections.Generic;
-using System.Collections;
 
 public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
 
@@ -22,16 +20,6 @@ public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
         public VertexData ( Vector3 position, int index ) {
             Position = position;
             Index = index;
-        }
-    }
-
-    private class TriangleData {
-        public int TriangleIndex { get; set; }
-        public bool Changed { get; set; }
-
-        public TriangleData ( int triangleIndex, bool changed ) {
-            TriangleIndex = triangleIndex;
-            Changed = changed;
         }
     }
 
@@ -187,6 +175,8 @@ public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
         MeshCollider meshCollider = GetComponent<MeshCollider>();
         meshCollider.sharedMesh = null;
         meshCollider.sharedMesh = DeformedMesh;
+        DeformedMesh.RecalculateNormals();
+        DeformedMesh.RecalculateBounds();
     }
 
     public void UndoChange () {
