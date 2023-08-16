@@ -8,15 +8,15 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: TranslucentMaterial
-  m_Shader: {fileID: 4800000, guid: 1f53b2e079258874d987bc2948630b78, type: 3}
+  m_Shader: {fileID: 4800000, guid: ed04895971c00fc498c346df2ac0e9b4, type: 3}
   m_ValidKeywords:
-  - _DETAILSOURCE_SPECULARALPHA
   - _SOURCE_SPECULARALPHA
-  - _TRIPLANARSPACEPROJECTION_OBJECTSPACE
   m_InvalidKeywords:
   - _ALPHABLEND_ON
   - _BLENDMAINNORMAL_ON
+  - _DETAILSOURCE_SPECULARALPHA
   - _ENABLETRIPLANARPROJECTION_ON
+  - _TRIPLANARSPACEPROJECTION_OBJECTSPACE
   - _USEAOFROMMAINPROPERTIES_ON
   - _USEEMISSIONFROMMAINPROPERTIES_ON
   m_LightmapFlags: 4
@@ -139,7 +139,7 @@ Material:
     - _ZWrite: 0
     - __dirty: 1
     m_Colors:
-    - _Color: {r: 0.8117647, g: 0.8117647, b: 0.8117647, a: 0.47058824}
+    - _Color: {r: 0.8117647, g: 0.8117647, b: 0.8117647, a: 0.41568628}
     - _DetailColor: {r: 1, g: 1, b: 1, a: 0}
     - _DetailSpecularColor: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

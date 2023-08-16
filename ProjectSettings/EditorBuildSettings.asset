@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/ObjectAlignment.unity
+    guid: 6cfd7ef9432818a44b35ad6164099196
+  - enabled: 1
     path: Assets/Scenes/MeshDeformer.unity
     guid: f9d7eee598f9169499eafe2369f12f00
   m_configObjects:
