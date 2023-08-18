@@ -1,8 +1,7 @@
-using Microsoft.MixedReality.Toolkit.UI;
 using UnityEngine;
 
-public class ObjectButtonToggler : MonoBehaviour
-{
+public class ObjectButtonToggler : MonoBehaviour {
+
     [SerializeField]
     private Material defaultMaterial;
 
@@ -10,73 +9,90 @@ public class ObjectButtonToggler : MonoBehaviour
     private Material toggledMaterial;
 
     [SerializeField]
-    private MeshRenderer BraceButtonRenderer;
+    private MeshRenderer imageButtonRenderer;
 
     [SerializeField]
-    private MeshRenderer TorsoButtonRenderer;
+    private MeshRenderer braceButtonRenderer;
 
     [SerializeField]
-    private ObjectManipulator braceManipulator;
+    private MeshRenderer torsoButtonRenderer;
 
     [SerializeField]
-    private ObjectManipulator torsoManipulator;
+    private ImageHandler imageHandler;
 
     [SerializeField]
-    private MeshCollider braceMeshCollider;
+    private BraceHandler braceHandler;
 
     [SerializeField]
-    private MeshCollider torsoMeshCollider;
+    private PatientModelHandler patientModelHandler;
 
+    public bool ImageButtonToggled { get; set; } = false;
     public bool BraceButtonToggled { get; set; } = false;
     public bool TorsoButtonToggled { get; set; } = false;
 
-    private void Start () {
-        braceManipulator.enabled = false;
-        torsoManipulator.enabled = false;
+    public void ToggleImageButton () {
+        ImageButtonToggled = !ImageButtonToggled;
 
-        braceMeshCollider.enabled = false;
-        torsoMeshCollider.enabled = false;
+        if ( TorsoButtonToggled ) {
+            torsoButtonRenderer.material = defaultMaterial;
+            TorsoButtonToggled = false;
+            patientModelHandler.OnTorsoButtonToggledOff();
+        } else if (BraceButtonToggled) {
+            braceButtonRenderer.material = defaultMaterial;
+            BraceButtonToggled = false;
+            braceHandler.OnBraceButtonToggledOff();
+        }
+
+        if ( ImageButtonToggled ) {
+            imageButtonRenderer.material = toggledMaterial;
+            imageHandler.OnImageButtonToggledOn();
+        } else {
+            imageButtonRenderer.material = defaultMaterial;
+            imageHandler.OnImageButtonToggledOff();
+        }
     }
 
     public void ToggleBraceButton () {
         BraceButtonToggled = !BraceButtonToggled;
 
         if ( TorsoButtonToggled ) {
-            TorsoButtonRenderer.material = defaultMaterial;
+            torsoButtonRenderer.material = defaultMaterial;
             TorsoButtonToggled = false;
-            torsoManipulator.enabled = false;
-            torsoMeshCollider.enabled = false;
+            patientModelHandler.OnTorsoButtonToggledOff();
+        } else if ( ImageButtonToggled ) {
+            imageButtonRenderer.material = defaultMaterial;
+            ImageButtonToggled = false;
+            imageHandler.OnImageButtonToggledOff();
         }
 
         if ( BraceButtonToggled ) {
-            BraceButtonRenderer.material = toggledMaterial;
-            braceManipulator.enabled = true;
-            braceMeshCollider.enabled = true;
+            braceButtonRenderer.material = toggledMaterial;
+            braceHandler.OnBraceButtonToggledOn();
         } else {
-            BraceButtonRenderer.material = defaultMaterial;
-            braceManipulator.enabled = false;
-            braceMeshCollider.enabled = false;
+            braceButtonRenderer.material = defaultMaterial;
+            braceHandler.OnBraceButtonToggledOff();
         }
     }
 
     public void ToggleTorsoButton () {
         TorsoButtonToggled = !TorsoButtonToggled;
 
-        if ( BraceButtonToggled ) {
-            BraceButtonRenderer.material = defaultMaterial;
+        if ( ImageButtonToggled ) {
+            imageButtonRenderer.material = defaultMaterial;
+            ImageButtonToggled = false;
+            imageHandler.OnImageButtonToggledOff();
+        } else if ( BraceButtonToggled ) {
+            braceButtonRenderer.material = defaultMaterial;
             BraceButtonToggled = false;
-            braceManipulator.enabled = false;
-            braceMeshCollider.enabled = false;
+            braceHandler.OnBraceButtonToggledOff();
         }
 
         if ( TorsoButtonToggled ) {
-            TorsoButtonRenderer.material = toggledMaterial;
-            torsoManipulator.enabled = true;
-            torsoMeshCollider.enabled = true;
+            torsoButtonRenderer.material = toggledMaterial;
+            patientModelHandler.OnTorsoButtonToggledOn();
         } else {
-            TorsoButtonRenderer.material = defaultMaterial;
-            torsoManipulator.enabled = false;
-            torsoMeshCollider.enabled = false;
+            torsoButtonRenderer.material = defaultMaterial;
+            patientModelHandler.OnTorsoButtonToggledOff();
         }
     }
 }

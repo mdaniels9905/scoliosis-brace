@@ -1,7 +1,7 @@
 using UnityEngine;
 
-public class ObjectPositionManager : MonoBehaviour
-{
+public class ObjectPositionManager : MonoBehaviour {
+
     public static ObjectPositionManager Instance { get; set; }
 
     public Vector3[] objectPositions = new Vector3[ 2 ];
