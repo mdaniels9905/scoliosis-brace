@@ -133,8 +133,8 @@ GameObject:
   m_Component:
   - component: {fileID: 86197244}
   - component: {fileID: 86197247}
+  - component: {fileID: 86197249}
   - component: {fileID: 86197246}
-  - component: {fileID: 86197245}
   m_Layer: 0
   m_Name: SceneObjects
   m_TagString: Untagged
@@ -160,19 +160,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &86197245
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 86197243}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.8, z: 0.4}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &86197246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,7 +173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetObject: {fileID: 86197243}
-  boundsOverride: {fileID: 0}
+  boundsOverride: {fileID: 86197249}
   boundsCalculationMethod: 0
   activation: 0
   flattenAxis: 0
@@ -238,6 +225,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoConstraintSelection: 1
   selectedConstraints: []
+--- !u!65 &86197249
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 86197243}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.8, y: 1, z: 0.6}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &120830108
 GameObject:
   m_ObjectHideFlags: 0
@@ -680,16 +680,44 @@ PrefabInstance:
       value: 0.003
       objectReference: {fileID: 0}
     - target: {fileID: 1061387880118192949, guid: e969038e4d67d9b498de2ef538969506, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1061387880118192949, guid: e969038e4d67d9b498de2ef538969506, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1061387880118192949, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2056536748}
+    - target: {fileID: 1061387880118192949, guid: e969038e4d67d9b498de2ef538969506, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 8164078559394743202}
+    - target: {fileID: 1061387880118192949, guid: e969038e4d67d9b498de2ef538969506, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1061387880118192949, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ToggleTorsoButton
       objectReference: {fileID: 0}
     - target: {fileID: 1061387880118192949, guid: e969038e4d67d9b498de2ef538969506, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: UpdateBoundingBoxSize
+      objectReference: {fileID: 0}
+    - target: {fileID: 1061387880118192949, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: ObjectButtonToggler, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1061387880118192949, guid: e969038e4d67d9b498de2ef538969506, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: UpdateBoundingBox, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1061387880118192949, guid: e969038e4d67d9b498de2ef538969506, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 1104838564556229266, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: m_Mesh
@@ -829,7 +857,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181861232904626982, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: m_Name
-      value: RotateScoliosisBraceModel
+      value: RotateAllObjects
       objectReference: {fileID: 0}
     - target: {fileID: 4181861233357845160, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: m_Mesh
@@ -837,9 +865,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181861233357845206, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: m_text
-      value: 'Rotate Scoliosis
-
-        Brace Model'
+      value: "Rotate \nAll Objects"
       objectReference: {fileID: 0}
     - target: {fileID: 4181861233357845206, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: m_textAlignment
@@ -872,6 +898,18 @@ PrefabInstance:
     - target: {fileID: 5201862997053450832, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: m_RootOrder
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5201862997053450832, guid: e969038e4d67d9b498de2ef538969506, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5201862997053450832, guid: e969038e4d67d9b498de2ef538969506, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5201862997053450832, guid: e969038e4d67d9b498de2ef538969506, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 5201862997053450832, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: m_LocalPosition.x
@@ -916,22 +954,38 @@ PrefabInstance:
     - target: {fileID: 5781004132767713567, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: iconQuadTexture
       value: 
-      objectReference: {fileID: 2800000, guid: 4494cfaf424cdde49895b91e2b559258, type: 3}
+      objectReference: {fileID: 2800000, guid: bb1b4a9241fba2042a81428e917afd5d, type: 3}
     - target: {fileID: 6722744150799764869, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6722744150799764869, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2056536748}
     - target: {fileID: 6722744150799764869, guid: e969038e4d67d9b498de2ef538969506, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6722744150799764869, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ToggleBraceButton
       objectReference: {fileID: 0}
     - target: {fileID: 6722744150799764869, guid: e969038e4d67d9b498de2ef538969506, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: UpdateBoundingBoxSize
+      objectReference: {fileID: 0}
+    - target: {fileID: 6722744150799764869, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: ObjectButtonToggler, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6722744150799764869, guid: e969038e4d67d9b498de2ef538969506, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: UpdateBoundingBox, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6722744150799764869, guid: e969038e4d67d9b498de2ef538969506, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6906180913520880170, guid: e969038e4d67d9b498de2ef538969506, type: 3}
       propertyPath: m_IsActive
@@ -1246,9 +1300,9 @@ GameObject:
   - component: {fileID: 800807892}
   - component: {fileID: 800807891}
   - component: {fileID: 800807890}
+  - component: {fileID: 800807895}
   - component: {fileID: 800807894}
   - component: {fileID: 800807893}
-  - component: {fileID: 800807895}
   - component: {fileID: 800807897}
   - component: {fileID: 800807898}
   - component: {fileID: 800807899}
@@ -1448,7 +1502,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetObject: {fileID: 800807888}
-  boundsOverride: {fileID: 0}
+  boundsOverride: {fileID: 800807895}
   boundsCalculationMethod: 0
   activation: 0
   flattenAxis: 0
@@ -1545,7 +1599,7 @@ MonoBehaviour:
   drawTetherWhenManipulating: 1
   handlesIgnoreCollider: {fileID: 0}
   handleSlatePrefab: {fileID: 0}
-  showScaleHandles: 1
+  showScaleHandles: 0
   scaleBehavior: 0
 --- !u!114 &1078594673
 MonoBehaviour:
@@ -8108,7 +8162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectBounds: {fileID: 86197246}
-  objectBoxCollider: {fileID: 86197245}
+  objectBoxCollider: {fileID: 86197249}
 --- !u!1 &8164078559394743192
 GameObject:
   m_ObjectHideFlags: 0
@@ -8121,15 +8175,16 @@ GameObject:
   - component: {fileID: 2823090747910613481}
   - component: {fileID: 1587545475891088765}
   - component: {fileID: 544085885}
+  - component: {fileID: 8164078559394743203}
   - component: {fileID: 544085883}
   - component: {fileID: 544085884}
   - component: {fileID: 8164078559394743195}
   - component: {fileID: 8164078559394743196}
   - component: {fileID: 8164078559394743197}
   - component: {fileID: 8164078559394743198}
-  - component: {fileID: 8164078559394743199}
   - component: {fileID: 8164078559394743201}
   - component: {fileID: 8164078559394743200}
+  - component: {fileID: 8164078559394743202}
   m_Layer: 0
   m_Name: PatientModel
   m_TagString: Untagged
@@ -8190,19 +8245,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10e833114ffff794eb4ebdb092705c9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!65 &8164078559394743199
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8164078559394743192}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 660, y: 720, z: 380}
-  m_Center: {x: 3, y: 410, z: 0}
 --- !u!114 &8164078559394743200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8233,7 +8275,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetObject: {fileID: 8164078559394743192}
-  boundsOverride: {fileID: 0}
+  boundsOverride: {fileID: 8164078559394743203}
   boundsCalculationMethod: 0
   activation: 0
   flattenAxis: 0
@@ -8271,6 +8313,31 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   elasticsManager: {fileID: 0}
+--- !u!114 &8164078559394743202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8164078559394743192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30d281aa01cd52d4496213b0b42b169a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &8164078559394743203
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8164078559394743192}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 662.18896, y: 719.5154, z: 383.91534}
+  m_Center: {x: 2.932795, y: 359.7577, z: 0}
 --- !u!33 &8303345021135845047
 MeshFilter:
   m_ObjectHideFlags: 0

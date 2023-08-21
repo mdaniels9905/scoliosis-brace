@@ -9,8 +9,7 @@ public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
     public float selectionRadius = 0.075f;
 
     public Mesh DeformedMesh { get; set; }
-    public bool RotationActivated { get; set; } = false;
-    public bool MovementActivated { get; set; } = false;
+    public bool MoveAndRotateActivated { get; set; } = false;
     public bool DeformerActivated { get; set; } = true;
 
     private class VertexData {
@@ -29,6 +28,7 @@ public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
     private Vector3[] originalVertices, transformedVertices, nearbyVertices, storedVertices, displacedVertices;
     private VertexData[] nearbyVertexData;
     private PointOctree<VertexData> octree;
+    //private BoxCollider boxCollider;
 
     private void Start () {
         CoreServices.InputSystem.RegisterHandler<IMixedRealityPointerHandler>( this );
@@ -61,6 +61,8 @@ public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
         MeshCollider meshCollider = GetComponent<MeshCollider>();
         meshCollider.sharedMesh = null;
         meshCollider.sharedMesh = DeformedMesh;
+        //boxCollider = GetComponent<BoxCollider>();
+        //boxColliderCenter = boxCollider.center;
 
         originalVertices = storedVertices = DeformedMesh.vertices;
 
@@ -82,26 +84,24 @@ public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
     }
 
     public void OnPointerDown ( MixedRealityPointerEventData eventData ) {
-        if ( !RotationActivated ) {
-            if (!MovementActivated) {
-                if (DeformerActivated) {
-                    var pointerResult = eventData.Pointer.Result;
+        if ( !MoveAndRotateActivated ) {
+            if ( DeformerActivated ) {
+                var pointerResult = eventData.Pointer.Result;
 
-                    try {
-                        if ( pointerResult.CurrentPointerTarget == gameObject ) {
-                            previousHandPosition = pointerResult.StartPoint;
-                            Vector3 currentPositionOnSphere = pointerResult.Details.Point;
+                try {
+                    if ( pointerResult.CurrentPointerTarget == gameObject ) {
+                        previousHandPosition = pointerResult.StartPoint;
+                        Vector3 currentPositionOnSphere = pointerResult.Details.Point;
 
-                            selectedVertex = GetSelectedVertices( currentPositionOnSphere, selectionRadius );
-                            if ( float.IsPositiveInfinity( selectedVertex.x ) && float.IsPositiveInfinity( selectedVertex.y ) && float.IsPositiveInfinity( selectedVertex.z ) ) {
-                                vertexSelected = false;
-                            } else {
-                                vertexSelected = true;
-                                storedVertices = (Vector3[])displacedVertices.Clone();
-                            }
+                        selectedVertex = GetSelectedVertices( currentPositionOnSphere, selectionRadius );
+                        if ( float.IsPositiveInfinity( selectedVertex.x ) && float.IsPositiveInfinity( selectedVertex.y ) && float.IsPositiveInfinity( selectedVertex.z ) ) {
+                            vertexSelected = false;
+                        } else {
+                            vertexSelected = true;
+                            storedVertices = (Vector3[])displacedVertices.Clone();
                         }
-                    } catch ( NullReferenceException ) { }
-                }
+                    }
+                } catch ( NullReferenceException ) { }
             }
         }
     }
@@ -162,9 +162,11 @@ public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
         }
         DeformedMesh.vertices = displacedVertices;
         DeformedMesh.RecalculateNormals();
+        DeformedMesh.RecalculateBounds();
+        //UpdateBoxColliderSize();
     }
 
-    public void RefreshOctree () {
+    private void RefreshOctree () {
         octree = new PointOctree<VertexData>( 100f, transform.position, 0.5f );
 
         for ( int i = 0; i < displacedVertices.Length; i++ ) {
@@ -179,10 +181,21 @@ public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
         DeformedMesh.RecalculateBounds();
     }
 
+    //public void UpdateBoxColliderSize () {
+        //gameObject.SetActive( false );
+        
+        //Bounds bounds = DeformedMesh.bounds;
+        //boxCollider.center = boxColliderCenter;
+        //boxCollider.size = bounds.size;
+        
+        //gameObject.SetActive( true );
+    //}
+
     public void UndoChange () {
         displacedVertices = storedVertices;
         DeformedMesh.vertices = displacedVertices;
         DeformedMesh.RecalculateNormals();
+        DeformedMesh.RecalculateBounds();
         RefreshOctree();
     }
 
@@ -190,6 +203,7 @@ public class MeshDeformer : MonoBehaviour, IMixedRealityPointerHandler {
         DeformedMesh.vertices = originalVertices;
         displacedVertices = storedVertices = (Vector3[])originalVertices.Clone();
         DeformedMesh.RecalculateNormals();
+        DeformedMesh.RecalculateBounds();
         RefreshOctree();
     }
 }

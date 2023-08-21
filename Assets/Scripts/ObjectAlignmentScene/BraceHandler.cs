@@ -16,9 +16,6 @@ public class BraceHandler : MonoBehaviour {
 
         objectBounds.enabled = false;
         braceMeshCollider.enabled = false;
-
-        objectBoxCollider.center = new Vector3( 0, 0, 0.15f );
-        objectBoxCollider.size = new Vector3( 0.8f, 0.9f, 0.5f );
         objectBoxCollider.enabled = false;
     }
 

@@ -18,9 +18,6 @@ public class ExportMesh : MonoBehaviour {
     private TextMeshPro progressText;
 
     [SerializeField]
-    private GameObject sceneObjects;
-
-    [SerializeField]
     private GameObject menu;
 
     [SerializeField]
