@@ -58,12 +58,13 @@
   <ItemGroup>
     <Compile Include="Assets\Ciconia Studio\_Shared Files\Scripts\Demo\UIButton_ShowNext.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\ProgressIndicator\Scripts\ProgressIndicatorDemoAnimation.cs" />
+    <Compile Include="Assets\Scripts\ObjectAlignmentScene\UpdatePatientModelBoundingBox.cs" />
     <Compile Include="Assets\Scripts\MeshDeformerScene\RadiusModifier.cs" />
+    <Compile Include="Assets\Scripts\MeshDeformerScene\ManipulationTypeMenuHandler.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\ObjectManipulator\Scripts\ReturnToBounds.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\BoundingBox\Scripts\BoundingBoxExampleTest.cs" />
+    <Compile Include="Assets\Scripts\MeshDeformerScene\UpdateBoundingBoxSize.cs" />
     <Compile Include="Assets\Scripts\MeshDeformerScene\MoveAndRotateObject.cs" />
-    <Compile Include="Assets\Scripts\MeshDeformerScene\Undo.cs" />
-    <Compile Include="Assets\Scripts\ObjectAlignmentScene\MoveObjectSelector.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\BoundsControl\Scripts\BoundsControlRuntimeExample.cs" />
     <Compile Include="Assets\Scripts\ObjectAlignmentScene\ObjectButtonToggler.cs" />
     <Compile Include="Assets\Scripts\ObjectAlignmentScene\BraceHandler.cs" />
@@ -71,7 +72,7 @@
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - Boundary\Scripts\BoundaryVisualizationDemo.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\ProgressIndicator\Scripts\ProgressIndicatorDemoAsyncMethod.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\Dialog\Scripts\DialogExampleController.cs" />
-    <Compile Include="Assets\Scripts\MeshDeformerScene\MeshDeformer.cs" />
+    <Compile Include="Assets\Scripts\MeshDeformerScene\MeshManipulator.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\Collections\Scripts\GridObjectLayoutControl.cs" />
     <Compile Include="Assets\Scripts\ObjectAlignmentScene\ImageHandler.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\Dwell\BaseDwellSample.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Assets\Scripts\BothScenes\ObjectToggler.cs" />
     <Compile Include="Assets\_Heathen Engineering\Samples\UX Examples\Flat Icons [Free]\ToggleSetAnimatorBoolean.cs" />
     <Compile Include="Assets\Scripts\MeshDeformerScene\ExportMesh.cs" />
+    <Compile Include="Assets\Scripts\ObjectAlignmentScene\UpdateSceneObjectBoundingBox.cs" />
     <Compile Include="Assets\Scripts\MeshDeformerScene\SceneObjectPlacer.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\ManipulationHandler\Scripts\ChangeManipulation.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\Dwell\InstantDwellSample.cs" />
@@ -98,9 +100,8 @@
     <Compile Include="Assets\Ciconia Studio\_Shared Files\Scripts\Demo\FreeCamera.cs" />
     <Compile Include="Assets\Scripts\MeshDeformerScene\ShaderOptions.cs" />
     <Compile Include="Assets\Samples\Mixed Reality Toolkit Examples\2.8.3\Demos - UX\Dwell\ListItemDwell.cs" />
-    <Compile Include="Assets\Scripts\ObjectAlignmentScene\UpdatePatientModelBoundingBox.cs" />
-    <Compile Include="Assets\Scripts\ObjectAlignmentScene\UpdateSceneObjectBoundingBox.cs" />
-    <Compile Include="Assets\Scripts\MeshDeformerScene\UpdateBoundingBoxSize.cs" />
+    <Compile Include="Assets\Scripts\MeshDeformerScene\ToggleShaderMenu.cs" />
+    <Compile Include="Assets\Scripts\MeshDeformerScene\ToggleBrushTypeMenus.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

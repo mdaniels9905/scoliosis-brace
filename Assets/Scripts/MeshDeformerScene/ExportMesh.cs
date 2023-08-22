@@ -36,10 +36,10 @@ public class ExportMesh : MonoBehaviour {
         }
     }
 
-    private MeshDeformer meshDeformer;
+    private MeshManipulator meshManipulator;
 
     private void Start () {
-        meshDeformer = GetComponent<MeshDeformer>();
+        meshManipulator = GetComponent<MeshManipulator>();
     }
 
     public void StartProcessing () {
@@ -49,13 +49,13 @@ public class ExportMesh : MonoBehaviour {
 
         progressBar.transform.localScale = new( 0, 1, 1 );
         menu.SetActive( false );
-        meshDeformer.DeformerActivated = false;
+        meshManipulator.DeformerActivated = false;
 
         StartCoroutine( ExtrudeMesh() );
     }
 
     private IEnumerator ExtrudeMesh () {
-        Mesh mesh = meshDeformer.DeformedMesh;
+        Mesh mesh = meshManipulator.DeformedMesh;
         
         progressText.text = "Simplifying mesh ...";
         progressBar.transform.localScale = new( 0.1f, 1, 1 );
@@ -262,6 +262,6 @@ public class ExportMesh : MonoBehaviour {
 
         progressIndicator.SetActive( false );
         menu.SetActive( true );
-        meshDeformer.DeformerActivated = true;
+        meshManipulator.DeformerActivated = true;
     }
 }

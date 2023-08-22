@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class MoveAndRotateObject : MonoBehaviour {
 
-    private MeshDeformer meshDeformer;
+    private MeshManipulator meshManipulator;
     private BoundsControl boundsControl;
     private BoxCollider boxCollider;
     private ObjectManipulator objectManipulator;
     private RotationAxisConstraint rotationAxisConstraint;
     
     private void Start () {
-        meshDeformer = GetComponent<MeshDeformer>();
+        meshManipulator = GetComponent<MeshManipulator>();
         boundsControl = GetComponent<BoundsControl>();
         boxCollider = GetComponent<BoxCollider>();
         objectManipulator = GetComponent<ObjectManipulator>();
@@ -23,14 +23,14 @@ public class MoveAndRotateObject : MonoBehaviour {
     }
 
     public void ActivateMoveAndRotate () {
-        meshDeformer.MoveAndRotateActivated = !meshDeformer.MoveAndRotateActivated;
+        meshManipulator.MoveAndRotateActivated = !meshManipulator.MoveAndRotateActivated;
 
-        boxCollider.enabled = meshDeformer.MoveAndRotateActivated;
-        boundsControl.rotationHandlesConfiguration.ShowHandleForX = meshDeformer.MoveAndRotateActivated;
-        boundsControl.rotationHandlesConfiguration.ShowHandleForY = meshDeformer.MoveAndRotateActivated;
-        boundsControl.rotationHandlesConfiguration.ShowHandleForZ = meshDeformer.MoveAndRotateActivated;
-        boundsControl.Active = meshDeformer.MoveAndRotateActivated;
-        rotationAxisConstraint.enabled = meshDeformer.MoveAndRotateActivated;
-        objectManipulator.enabled = meshDeformer.MoveAndRotateActivated;
+        boxCollider.enabled = meshManipulator.MoveAndRotateActivated;
+        boundsControl.rotationHandlesConfiguration.ShowHandleForX = meshManipulator.MoveAndRotateActivated;
+        boundsControl.rotationHandlesConfiguration.ShowHandleForY = meshManipulator.MoveAndRotateActivated;
+        boundsControl.rotationHandlesConfiguration.ShowHandleForZ = meshManipulator.MoveAndRotateActivated;
+        boundsControl.Active = meshManipulator.MoveAndRotateActivated;
+        rotationAxisConstraint.enabled = meshManipulator.MoveAndRotateActivated;
+        objectManipulator.enabled = meshManipulator.MoveAndRotateActivated;
     }
 }

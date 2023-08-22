@@ -1,14 +1,8 @@
 using UnityEngine;
 using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.Input;
-using System;
 
 public class RadiusIndicatorHandler : MonoBehaviour {
-
-    //public bool RotationActivated { get; set; } = false;
-    //public bool MovementActivated { get; set; } = false;
-
-    //public bool MoveAndRotateActivated { get; set; } = false;
 
     [SerializeField]
     private GameObject scoliosisBraceObject;
@@ -17,13 +11,16 @@ public class RadiusIndicatorHandler : MonoBehaviour {
     private GameObject radiusSlider;
 
     [SerializeField]
-    private MeshDeformer meshDeformer;
+    private MeshManipulator meshManipulator;
 
     [SerializeField]
     private Material opaqueMaterial;
 
     [SerializeField]
     private Material transparentMaterial;
+
+    [SerializeField]
+    private ManipulationTypeMenuHandler manipulationTypeMenuHandler;
 
     private float sphereRadius;
     private IMixedRealityPointer leftHandPointer;
@@ -36,28 +33,28 @@ public class RadiusIndicatorHandler : MonoBehaviour {
     }
 
     private void Update () {
-        if ( !meshDeformer.MoveAndRotateActivated ) {
-            foreach ( var inputSource in CoreServices.InputSystem.DetectedInputSources ) {
-                foreach ( var pointer in inputSource.Pointers ) {
-                    if ( pointer.PointerName == "Left_ShellHandRayPointer(Clone)" )
-                        leftHandPointer = pointer;
-                    else if ( pointer.PointerName == "Right_ShellHandRayPointer(Clone)" )
-                        rightHandPointer = pointer;
+        if ( !meshManipulator.MoveAndRotateActivated ) {
+            if ( manipulationTypeMenuHandler.DeformMenuActivated || manipulationTypeMenuHandler.EraseMenuActivated ) {
+                foreach ( var inputSource in CoreServices.InputSystem.DetectedInputSources ) {
+                    foreach ( var pointer in inputSource.Pointers ) {
+                        if ( pointer.PointerName == "Left_ShellHandRayPointer(Clone)" )
+                            leftHandPointer = pointer;
+                        else if ( pointer.PointerName == "Right_ShellHandRayPointer(Clone)" )
+                            rightHandPointer = pointer;
+                    }
                 }
-            }
 
-            if ( leftHandPointer != null && leftHandPointer.IsInteractionEnabled )
-                activePointer = leftHandPointer;
-            else if ( rightHandPointer != null && rightHandPointer.IsInteractionEnabled )
-                activePointer = rightHandPointer;
-            else
-                activePointer = null;
+                if ( leftHandPointer != null && leftHandPointer.IsInteractionEnabled )
+                    activePointer = leftHandPointer;
+                else if ( rightHandPointer != null && rightHandPointer.IsInteractionEnabled )
+                    activePointer = rightHandPointer;
+                else
+                    activePointer = null;
 
-            if ( isUpdateRunning ) {
-                sphereRadius = meshDeformer.selectionRadius * 2;
-                transform.localScale = new Vector3( sphereRadius, sphereRadius, sphereRadius );
+                if ( isUpdateRunning ) {
+                    sphereRadius = meshManipulator.selectionRadius * 2;
+                    transform.localScale = new Vector3( sphereRadius, sphereRadius, sphereRadius );
 
-                try {
                     if ( activePointer != null && activePointer.IsInteractionEnabled ) {
                         if ( activePointer.Result.CurrentPointerTarget == scoliosisBraceObject )
                             transform.position = activePointer.Result.Details.Point;
@@ -66,13 +63,13 @@ public class RadiusIndicatorHandler : MonoBehaviour {
                     } else {
                         transform.localScale = Vector3.zero;
                     }
-                } catch ( NullReferenceException ) { }
+                }
             }
         }
     }
 
     public void ChangeSphereSize () {
-        sphereRadius = meshDeformer.selectionRadius * 2;
+        sphereRadius = meshManipulator.selectionRadius * 2;
         transform.localScale = new Vector3( sphereRadius, sphereRadius, sphereRadius );
     }
 

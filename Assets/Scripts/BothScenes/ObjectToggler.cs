@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public class ObjectToggler : MonoBehaviour {
-    
+
     private bool objectVisible = true;
 
     private void Start () {

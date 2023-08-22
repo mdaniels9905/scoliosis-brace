@@ -3,20 +3,20 @@ using UnityEngine;
 
 public class UpdateBoundingBoxSize : MonoBehaviour
 {
-    private MeshDeformer meshDeformer;
+    private MeshManipulator meshManipulator;
     private BoundsControl boundsControl;
     private BoxCollider boxCollider;
 
 
     private void Start () {
-        meshDeformer = GetComponent<MeshDeformer>();
+        meshManipulator = GetComponent<MeshManipulator>();
         boundsControl = GetComponent<BoundsControl>();
         boxCollider = GetComponent<BoxCollider>();
     }
 
     public void UpdateBoxVisuals () {
         boundsControl.ResetVisuals();
-        Bounds bounds = meshDeformer.DeformedMesh.bounds;
+        Bounds bounds = meshManipulator.DeformedMesh.bounds;
         boxCollider.size = bounds.size * 1.2f;
         boundsControl.UpdateVisuals();
     }
