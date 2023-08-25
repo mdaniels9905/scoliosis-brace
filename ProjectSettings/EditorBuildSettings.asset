@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/ObjectAlignment.unity
     guid: 6cfd7ef9432818a44b35ad6164099196
   - enabled: 1
-    path: Assets/Scenes/MeshDeformer.unity
+    path: Assets/Scenes/MeshEditor.unity
     guid: f9d7eee598f9169499eafe2369f12f00
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 389a55194b718c442be0d7336613e8d4, type: 2}
