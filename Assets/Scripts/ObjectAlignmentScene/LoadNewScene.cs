@@ -11,7 +11,7 @@ public class LoadNewScene : MonoBehaviour {
 
     public void OnYesClicked () {
         SaveObjectTransforms();
-        SceneManager.LoadScene( "MeshDeformer" );  
+        SceneManager.LoadScene( "MeshEditor" );  
     }
 
     private void SaveObjectTransforms () {
