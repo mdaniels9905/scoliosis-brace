@@ -1,3 +1,6 @@
+//This script updates the size of the boundary box around the object it is attached to when the mesh of the object changes.
+//Written by Maya Daniels
+
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using UnityEngine;
 

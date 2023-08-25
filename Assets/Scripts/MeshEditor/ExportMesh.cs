@@ -1,3 +1,8 @@
+//This script is attached to the Export button and is responsible for copying and extruding the mesh (to create an inner and outer wall) and
+//exporting the model to a OBJ file located in the Pictures Library on the HoloLens 2. The meshManipulator script is deactivated and the menu
+//disappears when the Export button is pressed.
+//Written by Maya Daniels
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -51,7 +56,7 @@ public class ExportMesh : MonoBehaviour {
         menu.SetActive( false );
         meshManipulator.DeformerActivated = false;
 
-        StartCoroutine( ExtrudeMesh() );
+        StartCoroutine( ExtrudeMesh() ); //The majority of this script uses coroutines to prevent the app from freezing
     }
 
     private IEnumerator ExtrudeMesh () {
@@ -73,8 +78,9 @@ public class ExportMesh : MonoBehaviour {
         Array.Copy( vertices, newVertices, vertices.Length );
         Array.Copy( triangles, newTriangles, triangles.Length );
 
-        int counter = 0;
+        int counter = 0; //counter is used to reduce the occurence of the yield return null so that it DOES NOT occur every frame
         for ( int i = 0; i < mesh.vertices.Length; i++ ) {
+            //Extruding each vertex of the mesh copy by the "extrusionDistance"
             newVertices[ i + mesh.vertices.Length ] = vertices[ i ] + ( new Vector3( mesh.normals[ i ].x, 0, mesh.normals[ i ].z ).normalized * extrusionDistance );
             
             counter++;
@@ -86,6 +92,7 @@ public class ExportMesh : MonoBehaviour {
         progressText.text = "Rewinding triangles ...";
         progressBar.transform.localScale = new( 0.4f, 1, 1 );
 
+        //Rewinding the triangles of the extruded mesh
         counter = 0;
         for ( int i = 0; i < triangles.Length; i += 3 ) {
             newTriangles[ i + triangles.Length ] = triangles[ i ] + vertices.Length;
@@ -110,10 +117,13 @@ public class ExportMesh : MonoBehaviour {
         Export( extrudedObject );
     }
 
+    //The imported scoliosis brace has duplicates of the same vertices (which causes problems when extruding the mesh), so this script goes
+    //through all the vertices and keeps a single occurence of each vertex.
     private Mesh SimplifyMesh ( Vector3[] startingVertices, int[] startingTriangles ) {
         Dictionary<Vector3, List<int>> vertexInfo = new();
 
-        //For each unique index in the vertices array, add all occurences of the vertex in the oldIndices list and add that vertex to the vertexInfo array
+        //For each unique index in the vertices array, add all occurences of the vertex to the oldIndices list (add the index of each vertex
+        //occurence) and add that vertex to the vertexInfo array
         for ( int i = 0; i < startingVertices.Length; i++) {
             Vector3 tempVertex = startingVertices[ i ];
             List<int> indexList = CheckIfExists( tempVertex, vertexInfo );

@@ -1,3 +1,8 @@
+//This script is responsible for handling the toggle features of the brush menu (sphere and plane buttons). When one button is toggled on,
+//the other one is is toggled off (if it was already on). Toggling a button on activates certain scripts and toggling the same button off
+//deactivates the scripts.
+//Written by Maya Daniels
+
 using UnityEngine;
 
 public class ToggleBrushTypeMenus : MonoBehaviour {

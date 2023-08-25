@@ -1,3 +1,7 @@
+//This script controls the toggle feature of the Deform and Erase button. Only one button can be toggle at a time. If one button is toggled
+//and the other is clicked on, the first one will be toggled off and the second one will be toggled on.
+//Written by Maya Daniels
+
 using UnityEngine;
 
 public class ManipulationTypeMenuHandler : MonoBehaviour {

@@ -1,3 +1,6 @@
+//This script is responsible for saving the positions of all three objects in the ObjectAlignment scene and loading the MeshEditor scene.
+//Written by Maya Daniels
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

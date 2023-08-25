@@ -1,6 +1,7 @@
+//This script updates the size of the boundary box around all 3 scene obejcts when the locations of the objects change.
+//Written by Maya Daniels
+
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UpdateSceneObjectBoundingBox : MonoBehaviour
@@ -37,10 +38,7 @@ public class UpdateSceneObjectBoundingBox : MonoBehaviour
                 maxZ = childPosition.z;
         }
 
-        //Vector3 center = ( minBounds + maxBounds ) / 2;
         Vector3 size = new( ( ( maxBounds - minBounds ) * 2 ).x, maxY, maxZ );
-
-        //boxCollider.center = transform.InverseTransformPoint( center );
         boxCollider.size = size;
     }
 }

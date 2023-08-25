@@ -1,3 +1,6 @@
+//This script handles the object placement from the first scene to the next scene.
+//Written by Maya Daniels
+
 using UnityEngine;
 
 public class ObjectPositionManager : MonoBehaviour {

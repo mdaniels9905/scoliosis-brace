@@ -1,3 +1,6 @@
+//This script is responsible for placing the brace and aligned image and patient model in the required position in the MeshEditor scene.
+//Written by Maya Daniels
+
 using UnityEngine;
 
 public class SceneObjectPlacer : MonoBehaviour {

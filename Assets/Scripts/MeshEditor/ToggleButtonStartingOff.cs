@@ -1,4 +1,7 @@
-using Unity.VisualScripting;
+//This script controls the toggle feature of the button (changing the color from light blue to the default blue). This script starts with
+//the button toggled off.
+//Written by Maya Daniels
+
 using UnityEngine;
 
 public class ToggleButtonStartingOff : MonoBehaviour

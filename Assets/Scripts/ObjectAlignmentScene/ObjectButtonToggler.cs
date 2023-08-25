@@ -1,3 +1,7 @@
+//This script handles the toggle features of the button (changing between light blue and default blue) and calls the function that
+//activates/deactivates certain scripts to determine if the feature is activated/deactivated. 
+//Written by Maya Daniels
+
 using UnityEngine;
 
 public class ObjectButtonToggler : MonoBehaviour {

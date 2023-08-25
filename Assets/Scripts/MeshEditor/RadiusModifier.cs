@@ -1,3 +1,6 @@
+//This script is attached to the slider and updates the brush size in the MeshManipulator script.
+//Written by Maya Daniels
+
 using UnityEngine;
 using Microsoft.MixedReality.Toolkit.UI;
 

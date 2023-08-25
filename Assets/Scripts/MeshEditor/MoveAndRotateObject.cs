@@ -1,3 +1,7 @@
+//This script controls the toggle feature of the Move & Rotate button. When the button is toggled on, certain scripts are activated to allow
+//for such movement. When the button is toggled off, the scripts are deactivated and the brace can no longer move/rotate.
+//Written by Maya Daniels
+
 using Microsoft.MixedReality.Toolkit.UI;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using UnityEngine;

@@ -1,3 +1,6 @@
+//This script controls the actual mechanics of the Deform and Erase buttons.
+//Written by Maya Daniels
+
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit;
 using System;
@@ -38,6 +41,8 @@ public class MeshManipulator : MonoBehaviour, IMixedRealityPointerHandler {
     private void Start () {
         CoreServices.InputSystem.RegisterHandler<IMixedRealityPointerHandler>( this );
         
+        //The mesh consists of one layer of vertices and usually the normals are pointing inwards. This part of the code reverses the normals so
+        //that they are pointing outwards and then a double-sided shader is added to each of the materials to allow all areas of the brace to be seen.
         Mesh reversedMesh = GetComponent<MeshFilter>().mesh;
         Vector3[] vertices = reversedMesh.vertices;
         Vector3[] normals = reversedMesh.normals;
@@ -62,6 +67,7 @@ public class MeshManipulator : MonoBehaviour, IMixedRealityPointerHandler {
             triangles = reversedTriangles
         };
 
+        //This part is setting the new reversed mesh to be the mesh of the brace.
         GetComponent<MeshFilter>().mesh = DeformedMesh;
         MeshCollider meshCollider = GetComponent<MeshCollider>();
         meshCollider.sharedMesh = null;
@@ -76,6 +82,7 @@ public class MeshManipulator : MonoBehaviour, IMixedRealityPointerHandler {
             transformedVertices[ i ] = transform.TransformPoint( originalVertices[ i ] );
         }
 
+        //The data partitioning structure used to store all the vertices is called an octree.
         octree = new PointOctree<VertexData>( 100f, transform.position, 0.5f ); // maxSize = 100f, center = transform.position, minSize = 0.5f
         for ( int i = 0; i < transformedVertices.Length; i++ ) {
             octree.Add( new VertexData( transformedVertices[ i ], i ), transformedVertices[ i ] );
@@ -86,6 +93,7 @@ public class MeshManipulator : MonoBehaviour, IMixedRealityPointerHandler {
         CoreServices.InputSystem?.UnregisterHandler<IMixedRealityPointerHandler>( this );
     }
 
+    //OnPointerDown means the user's index finger and thumb make contact (the down part of the click)
     public void OnPointerDown ( MixedRealityPointerEventData eventData ) {
         if ( !MoveAndRotateActivated ) {
             if ( DeformerActivated ) {
@@ -104,13 +112,14 @@ public class MeshManipulator : MonoBehaviour, IMixedRealityPointerHandler {
                         vertexSelected = false;
                     } else {
                         vertexSelected = true;
-                        storedVertices = (Vector3[])displacedVertices.Clone();
+                        storedVertices = (Vector3[])displacedVertices.Clone(); //This vector is used for the undo button
                     }
                 }
             }
         }
     }
 
+    //This occurs when the user's index finger and thumb are touching and they are moving their hand
     public void OnPointerDragged ( MixedRealityPointerEventData eventData ) {
         if ( vertexSelected && manipulationTypeHandler.DeformMenuActivated ) {
             DeformMesh(eventData);
@@ -119,6 +128,7 @@ public class MeshManipulator : MonoBehaviour, IMixedRealityPointerHandler {
         }
     }
 
+    //This is when the user's index finger and thumb break contact (the up part of the click)
     public void OnPointerUp ( MixedRealityPointerEventData eventData ) {
         vertexSelected = false;
         RefreshOctree();
@@ -127,6 +137,8 @@ public class MeshManipulator : MonoBehaviour, IMixedRealityPointerHandler {
     public void OnPointerClicked ( MixedRealityPointerEventData eventData ) { }
 
 
+    //This function finds the vertex closest to the hitPoint (where the cursor intersects with the brace) and fills an array with all the
+    //vertices that are within a certain radius of the closest vertex. The vertices within the array are called the selected vertices.
     public Vector3 GetSelectedSphereVertices (Vector3 hitPoint, float radius) {
         nearbyVertexData = octree.GetNearby( hitPoint, radius );
         nearbyVertices = new Vector3[ nearbyVertexData.Length ];
@@ -139,6 +151,7 @@ public class MeshManipulator : MonoBehaviour, IMixedRealityPointerHandler {
         if ( nearbyVertices.Length == 0 )
             return Vector3.positiveInfinity;
 
+        //The following code finds the closest vertex
         Vector3 closestVertex = nearbyVertices[ 0 ];
         float minDistanceSqr = ( closestVertex - hitPoint ).sqrMagnitude;
 
@@ -155,32 +168,13 @@ public class MeshManipulator : MonoBehaviour, IMixedRealityPointerHandler {
 
     public Vector3 GetSelectedPlaneVertices (Vector3 hitPoint, float planeLength) {
         //Find the vertex closest to the hitPoint
-        /* nearbyVertexData = octree.GetNearby( hitPoint, planeLength );
-         nearbyVertices = new Vector3[ nearbyVertexData.Length ];
-         for ( int i = 0; i < nearbyVertexData.Length; i++ ) {
-             nearbyVertices[ i ] = nearbyVertexData[ i ].Position;
-         }
+        //Make a list of all vertices that collide with the BoxCollider?
 
-         if ( nearbyVertices.Length == 0 )
-             return Vector3.positiveInfinity;
-
-         Vector3 closestVertex = nearbyVertices[ 0 ];
-         float minDistanceSqr = ( closestVertex - hitPoint ).sqrMagnitude;
-
-         for ( int i = 1; i < nearbyVertices.Length; i++ ) {
-             float distanceSqr = ( nearbyVertices[ i ] - hitPoint ).sqrMagnitude;
-
-             if ( distanceSqr < minDistanceSqr ) {
-                 minDistanceSqr = distanceSqr;
-                 closestVertex = nearbyVertices[ i ];
-             }
-         }*/
-
-        //Make a list of all vertices that collide with the BoxCollider
-        //return closestVertex;
-        return Vector3.zero;
+        return Vector3.zero; //placeholder value
     }
 
+    //This functions is responsible for finding the new position of the pulled vertices based on the user's hand position and assigning a weight
+    //to each selected vertex depending on their distance to the closest vertex (this creates the bell-like shape).
     public void DeformMesh ( MixedRealityPointerEventData eventData ) {
         Vector3 newHandPosition = eventData.Pointer.Position;
         Vector3 movementVector = newHandPosition - previousHandPosition;
@@ -195,6 +189,7 @@ public class MeshManipulator : MonoBehaviour, IMixedRealityPointerHandler {
         MoveVertices( movedVertexPositions );
     }
 
+    //This function actually moves the vertices
     public void MoveVertices ( Vector3[] newPositions ) {
         for ( int i = 0; i < newPositions.Length; i++ ) {
             int index = nearbyIndices[ i ];
@@ -210,6 +205,7 @@ public class MeshManipulator : MonoBehaviour, IMixedRealityPointerHandler {
         //Delete vertices from mesh
     }
 
+    //This function refreshes the data structure when vertices are moved.
     private void RefreshOctree () {
         octree = new PointOctree<VertexData>( 100f, transform.position, 0.5f );
 
@@ -225,6 +221,7 @@ public class MeshManipulator : MonoBehaviour, IMixedRealityPointerHandler {
         DeformedMesh.RecalculateBounds();
     }
 
+    //This function will undo the last manipulation to the mesh.
     public void UndoChange () {
         displacedVertices = storedVertices;
         DeformedMesh.vertices = displacedVertices;
@@ -233,6 +230,7 @@ public class MeshManipulator : MonoBehaviour, IMixedRealityPointerHandler {
         RefreshOctree();
     }
 
+    //This function will reset the mesh to the initial starting mesh.
     public void ResetMesh () {
         DeformedMesh.vertices = originalVertices;
         displacedVertices = storedVertices = (Vector3[])originalVertices.Clone();

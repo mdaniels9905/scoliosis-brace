@@ -1,3 +1,7 @@
+//This script changes the color of the boundary box to the "grabbed material" when the user moves an object. This was implemented because when
+//the object is rotated the boundary box turns blue, therefore to keep the pattern going, this was added for when the object is moved.
+//Written by Maya Daniels
+
 using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
@@ -33,6 +37,7 @@ public class ChangeBoxColorOnMove : MonoBehaviour
         }
     }
 
+    //Finds the cursor at the end of the hand pointer to know where to place the moveCursor
     private void FindActiveHandPointer () {
         foreach ( var inputSource in CoreServices.InputSystem.DetectedInputSources ) {
             foreach ( var pointer in inputSource.Pointers ) {

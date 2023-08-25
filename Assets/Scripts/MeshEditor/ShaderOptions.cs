@@ -1,3 +1,7 @@
+//This script controls the shader of the scoliosis brace (each function is attached to a button, when a button is clicked, the shader of the
+//brace changes to the one assocaited with that button.
+//Written by Maya Daniels
+
 using UnityEngine;
 
 public class ShaderOptions : MonoBehaviour {

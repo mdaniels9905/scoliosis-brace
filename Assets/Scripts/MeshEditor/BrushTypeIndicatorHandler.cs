@@ -1,3 +1,6 @@
+//This script controls the brush type indicators (which one is visible, and updates the location of the object when the hand ray cursor moves).
+//Written by Maya Daniels
+
 using UnityEngine;
 using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.Input;
@@ -40,6 +43,7 @@ public class BrushTypeIndicatorHandler : MonoBehaviour {
     private void Update () {
         if ( !meshManipulator.MoveAndRotateActivated ) {
             if ( manipulationTypeMenuHandler.DeformMenuActivated || manipulationTypeMenuHandler.EraseMenuActivated ) {
+                //Finds the cursor at the end of the hand pointer to know where to place the brush type indicator (sphere or plane)
                 foreach ( var inputSource in CoreServices.InputSystem.DetectedInputSources ) {
                     foreach ( var pointer in inputSource.Pointers ) {
                         if ( pointer.PointerName == "Left_ShellHandRayPointer(Clone)" )
@@ -57,6 +61,7 @@ public class BrushTypeIndicatorHandler : MonoBehaviour {
                     activePointer = null;
 
                 if ( isUpdateRunning ) {
+                    //While the brace is being edited, the brush type indicator position is updated as the cursor moves to a new position
                     if (brushType.SphereButtonToggled) {
                         sphere.transform.localScale = new Vector3( shapeSize, shapeSize, shapeSize );
                         MoveShapeWithCursor( sphere ); 
@@ -81,6 +86,7 @@ public class BrushTypeIndicatorHandler : MonoBehaviour {
         }
     }
 
+    //This script is activated when the slider is moved.
     public void ChangeShapeSize () {
         shapeSize = meshManipulator.selectionRadius * 2;
         if ( brushType.SphereButtonToggled ) {

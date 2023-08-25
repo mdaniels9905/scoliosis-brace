@@ -1,3 +1,7 @@
+//This script updates the size of the bounding box attached to the scoliosis brace (and aligned image and patient model) when the mesh of the
+//scoliosis brace changes.
+//Written by Maya Daniels
+
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using UnityEngine;
 
