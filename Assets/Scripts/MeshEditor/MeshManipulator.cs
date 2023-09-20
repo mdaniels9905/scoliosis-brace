@@ -1,10 +1,15 @@
 //This script controls the actual mechanics of the Deform and Erase buttons.
-//Written by Maya Daniels
+//Written by Maya Daniels, Edited by Maia Pysklywec
 
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit;
 using System;
 using UnityEngine;
+using UnityEngine.UIElements;
+using System.Diagnostics;
+using UnityEngine.SocialPlatforms.Impl;
+using System.Collections.Generic;
+using System.Linq;
 
 public class MeshManipulator : MonoBehaviour, IMixedRealityPointerHandler {
 
@@ -16,6 +21,9 @@ public class MeshManipulator : MonoBehaviour, IMixedRealityPointerHandler {
 
     [SerializeField]
     private ToggleBrushTypeMenus brushType;
+
+    [SerializeField]
+    private GameObject PlaneIndicator;
 
     public Mesh DeformedMesh { get; set; }
     public bool MoveAndRotateActivated { get; set; } = false;
@@ -35,8 +43,10 @@ public class MeshManipulator : MonoBehaviour, IMixedRealityPointerHandler {
     private Vector3 selectedVertex, previousHandPosition;
     private int[] nearbyIndices;
     private Vector3[] originalVertices, transformedVertices, nearbyVertices, storedVertices, displacedVertices;
-    private VertexData[] nearbyVertexData;
+    private VertexData[] nearbyVertexData, vertexDataRange;
     private PointOctree<VertexData> octree;
+    private List<VertexData> nearbyVertexDataList = new List<VertexData>();
+
 
     private void Start () {
         CoreServices.InputSystem.RegisterHandler<IMixedRealityPointerHandler>( this );
@@ -102,7 +112,6 @@ public class MeshManipulator : MonoBehaviour, IMixedRealityPointerHandler {
                 if ( pointerResult.CurrentPointerTarget == gameObject ) {
                     previousHandPosition = pointerResult.StartPoint;
                     Vector3 currentPositionOnSphere = pointerResult.Details.Point;
-
                     if ( brushType.SphereButtonToggled )
                         selectedVertex = GetSelectedSphereVertices( currentPositionOnSphere, selectionRadius );
                     else if ( brushType.PlaneButtonToggled )
@@ -167,10 +176,54 @@ public class MeshManipulator : MonoBehaviour, IMixedRealityPointerHandler {
     }
 
     public Vector3 GetSelectedPlaneVertices (Vector3 hitPoint, float planeLength) {
-        //Find the vertex closest to the hitPoint
-        //Make a list of all vertices that collide with the BoxCollider?
 
-        return Vector3.zero; //placeholder value
+        //This function will find the vertices inside a sqaure cube with length set by the user
+
+        //vertexDataRange will retrieve a large circle of data around the hit point (more than necessary)
+        vertexDataRange = octree.GetNearby( hitPoint, planeLength*2 );
+        nearbyVertexDataList.Clear();
+        
+        float halfSideLength = planeLength / 2;
+
+        int j = 0;
+        //finds the smallest point and largest point on the selection cube
+        Vector3 minPoint = hitPoint - new Vector3( halfSideLength, halfSideLength, halfSideLength );
+        Vector3 maxPoint = hitPoint + new Vector3( halfSideLength, halfSideLength, halfSideLength );
+
+        //this will sort throught vertexDataRange to find the points in that array that are inside the cube shape and add them to the nearbyVertexDataList
+        for ( int i = 0; i < vertexDataRange.Length; i++ ) {
+            Vector3 worldVertex = vertexDataRange[ i ].Position  ;
+            if ( worldVertex.x >= minPoint.x && worldVertex.x <= maxPoint.x ) {
+                if ( worldVertex.y >= minPoint.y && worldVertex.y <= maxPoint.y ) {
+                    if ( worldVertex.z >= minPoint.z && worldVertex.z <= maxPoint.z ) {
+                        nearbyVertexDataList.Add( vertexDataRange[ i ]);
+                        j++;
+
+                    }
+                }    
+            } 
+        }
+        nearbyVertices = new Vector3[ nearbyVertexDataList.Count ];
+        nearbyIndices = new int[ nearbyVertexDataList.Count ];
+
+        for ( int i = 0; i < nearbyVertexDataList.Count; i++ ) {
+            nearbyVertices[ i ] = nearbyVertexDataList[ i ].Position;
+            nearbyIndices[ i ] = nearbyVertexDataList[ i ].Index;
+        }
+
+        Vector3 closestVertex = nearbyVertices[ 0 ];
+        float minDistanceSqr = ( closestVertex - hitPoint ).sqrMagnitude;
+
+        for ( int i = 1; i < nearbyVertices.Length; i++ ) {
+            float distanceSqr = ( nearbyVertices[ i ] - hitPoint ).sqrMagnitude;
+
+            if ( distanceSqr < minDistanceSqr ) {
+                minDistanceSqr = distanceSqr;
+                closestVertex = nearbyVertices[ i ];
+            }
+        }
+
+        return closestVertex; 
     }
 
     //This functions is responsible for finding the new position of the pulled vertices based on the user's hand position and assigning a weight
@@ -180,12 +233,19 @@ public class MeshManipulator : MonoBehaviour, IMixedRealityPointerHandler {
         Vector3 movementVector = newHandPosition - previousHandPosition;
         Vector3[] movedVertexPositions = new Vector3[ nearbyVertices.Length ];
 
-        for ( int i = 0; i < nearbyVertices.Length; i++ ) {
-            float weight = Mathf.SmoothStep( 0f, 1f, 1f - Vector3.Distance( selectedVertex, nearbyVertices[ i ] ) / selectionRadius );
-            Vector3 weightedMovementVector = movementVector * weight;
-            movedVertexPositions[ i ] = nearbyVertices[ i ] + weightedMovementVector;
-        }
-
+        if ( brushType.SphereButtonToggled ) {
+            for ( int i = 0; i < nearbyVertices.Length; i++ ) {
+                float weight = Mathf.SmoothStep( 0f, 1f, 1f - Vector3.Distance( selectedVertex, nearbyVertices[ i ] ) / selectionRadius );
+                Vector3 weightedMovementVector = movementVector * weight;
+                movedVertexPositions[ i ] = nearbyVertices[ i ] + weightedMovementVector;
+            }
+        } else if ( brushType.PlaneButtonToggled ) {
+            for ( int i = 0; i < nearbyVertices.Length; i++ ) {
+                float weight = Mathf.SmoothStep( 0f, 1f, 1f - Vector3.Distance( selectedVertex, nearbyVertices[ i ] ) / (selectionRadius*2) );
+                Vector3 weightedMovementVector = movementVector * weight;
+                movedVertexPositions[ i ] = nearbyVertices[ i ] + weightedMovementVector;
+            }
+        }    
         MoveVertices( movedVertexPositions );
     }
 

@@ -66,7 +66,8 @@ public class BrushTypeIndicatorHandler : MonoBehaviour {
                         sphere.transform.localScale = new Vector3( shapeSize, shapeSize, shapeSize );
                         MoveShapeWithCursor( sphere ); 
                     } else if (brushType.PlaneButtonToggled) {
-                        plane.transform.localScale = new Vector3( shapeSize, 0.001f, shapeSize );
+                        float planeShapeSize = shapeSize / 2;
+                        plane.transform.localScale = new Vector3( planeShapeSize, planeShapeSize, planeShapeSize );
                         MoveShapeWithCursor( plane );
                     }
                 }
@@ -88,12 +89,14 @@ public class BrushTypeIndicatorHandler : MonoBehaviour {
 
     //This script is activated when the slider is moved.
     public void ChangeShapeSize () {
-        shapeSize = meshManipulator.selectionRadius * 2;
+        
         if ( brushType.SphereButtonToggled ) {
+            shapeSize = meshManipulator.selectionRadius * 2;
             sphere.SetActive( true );
             sphere.transform.localScale = new Vector3( shapeSize, shapeSize, shapeSize );
         } else if ( brushType.PlaneButtonToggled ) {
-            plane.transform.localScale = new Vector3( shapeSize, 0.001f, shapeSize );
+            shapeSize = meshManipulator.selectionRadius;
+            plane.transform.localScale = new Vector3( shapeSize, shapeSize, shapeSize );
             plane.SetActive( true );
         }
     }
